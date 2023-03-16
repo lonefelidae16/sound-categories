@@ -74,15 +74,15 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
 
         public static SoundEntry create(GameOptions options, int width, SimpleOption<?> simpleOption) {
             return new SoundEntry(List.of(
-                    simpleOption.createButton(options, width / 2 - 155, 0, 310))
+                    simpleOption.createWidget(options, width / 2 - 155, 0, 310))
             );
         }
 
         public static SoundEntry createDouble(GameOptions options, int width, SimpleOption<?> first, @Nullable SimpleOption<?> second) {
             List<ClickableWidget> w = new ArrayList<>();
-            w.add(first.createButton(options, width / 2 - 155, 0, 150));
+            w.add(first.createWidget(options, width / 2 - 155, 0, 150));
             if (second != null) {
-                w.add(second.createButton(options, width / 2 + 5, 0, 150));
+                w.add(second.createWidget(options, width / 2 + 5, 0, 150));
             }
             return new SoundEntry(w);
         }
@@ -90,7 +90,7 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
         public static SoundEntry createGroup(GameOptions options, SimpleOption<?> group, int width, ButtonWidget.PressAction pressAction) {
             return new SoundEntry(
                     List.of(
-                            group.createButton(options, width / 2 - 155, 0, 285),
+                            group.createWidget(options, width / 2 - 155, 0, 285),
                             new TexturedButtonWidget(width / 2 + 135, 0, 20, 20, 0, 0, 20,
                                     SoundCategories.SETTINGS_ICON, 20, 40, pressAction)
                     ));
