@@ -1,41 +1,30 @@
 package dev.stashy.soundcategories.mixin;
 
 import dev.stashy.soundcategories.SoundCategories;
+import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.SimpleOption;
 import net.minecraft.sound.SoundCategory;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Map;
 
 @Mixin(GameOptions.class)
 public abstract class GameOptionsMixin
 {
-    @Unique
-    private SoundCategory currentCategory = null;
+    @Shadow
+    @Final
+    private Object2FloatMap<SoundCategory> soundVolumeLevels;
 
-    /**
-     * Storing the current SoundCategory in loop.
-     */
-    @Inject(method = "createSoundVolumeOption", at = @At("HEAD"))
-    private void soundcategories$storeCategory(String key, SoundCategory soundCategory, CallbackInfoReturnable<SimpleOption> cir) {
-        currentCategory = soundCategory;
-    }
-
-    /**
-     * Modifying a Constant of the default sound volume that exists in <code>SoundCategories.defaultLevels</code> and matches <code>this.currentCategory</code>.<br>
-     * default value is 1.0.
-     *
-     * @see GameOptions#createSoundVolumeOption
-     * @see GameOptions#GameOptions
-     */
-    @ModifyConstant(method = "createSoundVolumeOption", constant = @Constant(doubleValue = 1.0))
-    private double soundcategories$changeDefault(double value)
+    @Inject(method = "accept", at = @At(value = "HEAD"))
+    private void soundcategories$modifyDefaultVol(CallbackInfo ci)
     {
-        if (currentCategory == null) {
-            return value;
+        for (Map.Entry<SoundCategory, Float> entry : SoundCategories.defaultLevels.entrySet()) {
+            soundVolumeLevels.putIfAbsent(entry.getKey(), entry.getValue().floatValue());
         }
-        return SoundCategories.defaultLevels.getOrDefault(this.currentCategory, (float) value);
     }
 }
