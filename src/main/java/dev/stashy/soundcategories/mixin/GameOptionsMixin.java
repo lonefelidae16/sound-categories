@@ -19,7 +19,7 @@ public abstract class GameOptionsMixin
      * Storing the current SoundCategory in loop.
      */
     @Inject(method = "createSoundVolumeOption", at = @At("HEAD"))
-    private void soundcategories$storeCategory(String key, SoundCategory soundCategory, CallbackInfoReturnable<SimpleOption> cir) {
+    private void soundcategories$storeCategory(String key, SoundCategory soundCategory, CallbackInfoReturnable<SimpleOption<?>> cir) {
         currentCategory = soundCategory;
     }
 
@@ -36,6 +36,6 @@ public abstract class GameOptionsMixin
         if (currentCategory == null) {
             return value;
         }
-        return SoundCategories.defaultLevels.getOrDefault(this.currentCategory, (float) value);
+        return SoundCategories.DEFAULT_LEVELS.getOrDefault(this.currentCategory, (float) value);
     }
 }

@@ -16,47 +16,43 @@ import net.minecraft.text.Text;
 import java.util.Arrays;
 
 @Environment(EnvType.CLIENT)
-public class CustomSoundOptionsScreen extends GameOptionsScreen
-{
+public class CustomSoundOptionsScreen extends GameOptionsScreen {
     private SoundList list;
 
-    public CustomSoundOptionsScreen(Screen parent, GameOptions options)
-    {
+    public CustomSoundOptionsScreen(Screen parent, GameOptions options) {
         super(parent, options, Text.translatable("options.sounds.title"));
     }
 
-    protected void init()
-    {
+    protected void init() {
         this.list = new SoundList(this.client, this.width, this.height, 32, this.height - 32, 25);
         this.list.addCategory(SoundCategory.MASTER);
-        SoundCategory[] cats = Arrays.stream(SoundCategory.values())
-                         .filter(it -> !SoundCategories.parents.containsKey(
-                                 it) && !SoundCategories.parents.containsValue(it))
-                         .skip(1).toArray(SoundCategory[]::new);
+        SoundCategory[] cats = Arrays.stream(SoundCategory.values()).filter(it -> {
+            return !SoundCategories.PARENTS.containsKey(it) && !SoundCategories.PARENTS.containsValue(it);
+        }).skip(1).toArray(SoundCategory[]::new);
         var count = cats.length;
-        for (int i = 0; i < Math.ceil(count); i += 2)
+        for (int i = 0; i < Math.ceil(count); i += 2) {
             list.addDoubleCategory(cats[i], i + 1 < count ? cats[i + 1] : null);
+        }
         this.list.addSingleOptionEntry(gameOptions.getSoundDevice());
-        this.list.addAll(new SimpleOption[]{ gameOptions.getShowSubtitles(), gameOptions.getDirectionalAudio() });
+        this.list.addAll(new SimpleOption[]{gameOptions.getShowSubtitles(), gameOptions.getDirectionalAudio()});
 
-        Arrays.stream(SoundCategory.values()).filter(SoundCategories.parents::containsValue).forEach(it -> {
-            this.list.addGroup(it, button -> {this.client.setScreen(new SoundGroupOptionsScreen(this, gameOptions, it));});
+        Arrays.stream(SoundCategory.values()).filter(SoundCategories.PARENTS::containsValue).forEach(it -> {
+            this.list.addGroup(it, button -> this.client.setScreen(new SoundGroupOptionsScreen(this, gameOptions, it)));
         });
 
         this.addSelectableChild(this.list);
 
         this.addDrawableChild(
                 ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
-                    this.client.options.write();
-                    this.client.setScreen(this.parent);
-                })
+                            this.client.options.write();
+                            this.client.setScreen(this.parent);
+                        })
                         .dimensions(this.width / 2 - 100, this.height - 27, 200, 20)
                         .build()
         );
     }
 
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
-    {
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         this.list.render(matrices, mouseX, mouseY, delta);
         drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 5, 16777215);

@@ -24,10 +24,13 @@ public class SoundGroupOptionsScreen extends GameOptionsScreen {
 
     protected void init() {
         this.list = new SoundList(this.client, this.width, this.height, 32, this.height - 32, 25);
-        Arrays.stream(SoundCategory.values())
-                .filter(it -> SoundCategories.parents.containsKey(it)
-                        && SoundCategories.parents.get(it) == parentCategory)
-                .forEach(it -> this.list.addCategory(it));
+
+        this.list.addCategory(parentCategory);
+
+        final SoundCategory[] categories = Arrays.stream(SoundCategory.values()).filter(it -> {
+            return SoundCategories.PARENTS.containsKey(it) && SoundCategories.PARENTS.get(it) == parentCategory;
+        }).toArray(SoundCategory[]::new);
+        this.list.addAllCategory(categories);
 
         this.addSelectableChild(this.list);
 
