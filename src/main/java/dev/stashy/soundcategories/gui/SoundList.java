@@ -17,6 +17,7 @@ import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
@@ -30,8 +31,8 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
         return this.addEntry(SoundEntry.create(this.client.options, this.width, option));
     }
 
-    public void addOptionEntry(SimpleOption<?> firstOption, @Nullable SimpleOption<?> secondOption) {
-        this.addEntry(SoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
+    public int addOptionEntry(SimpleOption<?> firstOption, @Nullable SimpleOption<?> secondOption) {
+        return this.addEntry(SoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
     }
 
     public void addAll(SimpleOption<?>[] options) {
@@ -41,16 +42,18 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
     }
 
     public int addCategory(SoundCategory cat) {
-        return super.addEntry(SoundEntry.create(this.client.options, this.width, this.client.options.getSoundVolumeOption(cat)));
+        return this.addSingleOptionEntry(this.createCustomizedOption(cat));
     }
 
     public int addDoubleCategory(SoundCategory first, @Nullable SoundCategory second) {
-        return super.addEntry(SoundEntry.createDouble(this.client.options, this.width, this.client.options.getSoundVolumeOption(first), second != null ? this.client.options.getSoundVolumeOption(second) : null));
+        return this.addOptionEntry(this.createCustomizedOption(first),
+                (second != null) ? this.createCustomizedOption(second) : null
+        );
     }
 
-//    public int addOption(GameOptions o, Option w) {
-//        return super.addEntry(SoundEntry.createOption(o, w, this.width));
-//    }
+    public void addAllCategory(SoundCategory[] categories) {
+        this.addAll(Arrays.stream(categories).map(this::createCustomizedOption).toArray(SimpleOption[]::new));
+    }
 
     public int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction) {
         return super.addEntry(SoundEntry.createGroup(this.client.options, this.client.options.getSoundVolumeOption(group), this.width, pressAction));
@@ -64,6 +67,16 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
         return super.getScrollbarPositionX() + 32;
     }
 
+    private SimpleOption<?> createCustomizedOption(SoundCategory category) {
+        final SimpleOption<Double> simpleOption = this.client.options.getSoundVolumeOption(category);
+        if (SoundCategories.TOGGLEABLE_CATS.getOrDefault(category, false)) {
+            return SimpleOption.ofBoolean(simpleOption.toString(), simpleOption.getValue() > 0, value -> {
+                simpleOption.setValue(value ? 1.0 : 0.0);
+            });
+        }
+        return simpleOption;
+    }
+
     @Environment(EnvType.CLIENT)
     protected static class SoundEntry extends ElementListWidget.Entry<SoundList.SoundEntry> {
         List<? extends ClickableWidget> widgets;
@@ -73,18 +86,16 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
         }
 
         public static SoundEntry create(GameOptions options, int width, SimpleOption<?> simpleOption) {
-            return new SoundEntry(List.of(
-                    simpleOption.createWidget(options, width / 2 - 155, 0, 310))
-            );
+            return new SoundEntry(List.of(simpleOption.createWidget(options, width / 2 - 155, 0, 310)));
         }
 
         public static SoundEntry createDouble(GameOptions options, int width, SimpleOption<?> first, @Nullable SimpleOption<?> second) {
-            List<ClickableWidget> w = new ArrayList<>();
-            w.add(first.createWidget(options, width / 2 - 155, 0, 150));
+            List<ClickableWidget> widgets = new ArrayList<>();
+            widgets.add(first.createWidget(options, width / 2 - 155, 0, 150));
             if (second != null) {
-                w.add(second.createWidget(options, width / 2 + 5, 0, 150));
+                widgets.add(second.createWidget(options, width / 2 + 5, 0, 150));
             }
-            return new SoundEntry(w);
+            return new SoundEntry(widgets);
         }
 
         public static SoundEntry createGroup(GameOptions options, SimpleOption<?> group, int width, ButtonWidget.PressAction pressAction) {

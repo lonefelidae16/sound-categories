@@ -20,7 +20,7 @@ public interface CategoryLoader
         String id() default "";
 
         /**
-         * Sets the SoundCategory of a field to be the master category.
+         * Sets the SoundCategory of a field to be the master category.<br>
          * All categories defined after it will become grouped within the master,
          * and their volumes will be multiplied with the master category's volume level.
          */
@@ -30,5 +30,10 @@ public interface CategoryLoader
          * Allows changing the default volume level if one has not yet been set.
          */
         float defaultLevel() default 1.0f;
+
+        /**
+         * Sets the SoundCategory as a toggle button.
+         */
+        boolean toggle() default false;
     }
 }
