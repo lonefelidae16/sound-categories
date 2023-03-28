@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,7 @@ public class SoundCategories implements PreLaunchEntrypoint {
     public static final Map<SoundCategory, SoundCategory> PARENTS = new HashMap<>();
     public static final Map<SoundCategory, Float> DEFAULT_LEVELS = new HashMap<>();
     public static final Map<SoundCategory, Boolean> TOGGLEABLE_CATS = Maps.newHashMap();
+    public static final Map<SoundCategory, Text> TOOLTIPS = Maps.newHashMap();
 
     public static final Identifier SETTINGS_ICON = new Identifier("soundcategories", "textures/gui/settings.png");
 
@@ -59,6 +61,10 @@ public class SoundCategories implements PreLaunchEntrypoint {
 
                     if (annotation.toggle()) {
                         TOGGLEABLE_CATS.put(category, true);
+                    }
+
+                    if (!annotation.tooltip().isEmpty()) {
+                        TOOLTIPS.put(category, Text.translatable(annotation.tooltip()));
                     }
                 } catch (IllegalAccessException ex) {
                     LOGGER.error("[%s] Unexpected error has caught".formatted(SoundCategories.class.getSimpleName()), ex);
