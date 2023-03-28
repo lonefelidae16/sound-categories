@@ -35,5 +35,10 @@ public interface CategoryLoader
          * Sets the SoundCategory as a toggle button.
          */
         boolean toggle() default false;
+
+        /**
+         * Sets tooltip to be displayed on mouse hover.
+         */
+        String tooltip() default "";
     }
 }

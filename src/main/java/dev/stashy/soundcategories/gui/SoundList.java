@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
@@ -13,6 +14,7 @@ import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,7 +72,9 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
     private SimpleOption<?> createCustomizedOption(SoundCategory category) {
         final SimpleOption<Double> simpleOption = this.client.options.getSoundVolumeOption(category);
         if (SoundCategories.TOGGLEABLE_CATS.getOrDefault(category, false)) {
-            return SimpleOption.ofBoolean(simpleOption.toString(), simpleOption.getValue() > 0, value -> {
+            return SimpleOption.ofBoolean(simpleOption.toString(), value -> {
+                return Tooltip.of(SoundCategories.TOOLTIPS.getOrDefault(category, ScreenTexts.EMPTY));
+            }, simpleOption.getValue() > 0, value -> {
                 simpleOption.setValue(value ? 1.0 : 0.0);
             });
         }
