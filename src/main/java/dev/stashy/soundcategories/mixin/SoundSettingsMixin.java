@@ -12,14 +12,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(OptionsScreen.class)
-public class SoundSettingsMixin
-{
+public class SoundSettingsMixin {
     @Shadow
     private @Final GameOptions settings;
 
     @Inject(method = "method_19829", at = @At("RETURN"), cancellable = true)
-    public void getSoundOptionsScreen(CallbackInfoReturnable<Screen> cir)
-    {
+    private void soundcategories$redirectToCustomScreen(CallbackInfoReturnable<Screen> cir) {
         cir.setReturnValue(new CustomSoundOptionsScreen(OptionsScreen.class.cast(this), settings));
     }
 }

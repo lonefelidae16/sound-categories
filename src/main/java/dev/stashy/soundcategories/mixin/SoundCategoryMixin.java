@@ -1,31 +1,25 @@
 package dev.stashy.soundcategories.mixin;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import dev.stashy.soundcategories.CategoryLoader;
 import dev.stashy.soundcategories.SoundCategories;
 import net.minecraft.sound.SoundCategory;
-import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @Mixin(SoundCategory.class)
-public class SoundCategoryMixin
-{
+public class SoundCategoryMixin {
     @SuppressWarnings("InvokerTarget")
     @Invoker("<init>")
-    private static SoundCategory newSoundCategory(String internalName, int internalId, String name)
-    {
+    private static SoundCategory soundcategories$newSoundCategory(String internalName, int order, String name) {
         throw new AssertionError();
     }
 
@@ -36,38 +30,91 @@ public class SoundCategoryMixin
     @Mutable
     private static SoundCategory[] field_15255;
 
+    @Unique
+    private static final String INVALID_VAR_NAME_REGEX = "[^a-zA-Z0-9_$]";
+    @Unique
+    private static List<String> SUPPRESSED_NAMES;
+    @Unique
+    private static List<SoundCategory> EDITING_CATS;
+    @Unique
+    private static Map<String, SoundCategory> REGISTERED_VARIANTS;
+
+    /**
+     * Tries to make the custom enum. The created variable can be accessed from specified field.<br>
+     * When the name already exists, the reference is created to match it.
+     *
+     * @param field    The referer.
+     * @param instance The instance of an Object that has <code>field</code>.
+     * @param name     The name trying to register.
+     * @throws IllegalAccessException Thrown when cannot access to the <code>field</code>.
+     */
+    @Unique
+    private static void soundcategories$tryMakeVariant(Field field, Object instance, String name) throws IllegalAccessException {
+        final String varName = name.toUpperCase(Locale.ROOT);
+        final String displayName = name.toLowerCase(Locale.ROOT);
+        final SoundCategory newCategory;
+
+        // Check duplicated name.
+        if (REGISTERED_VARIANTS.containsKey(displayName)) {
+            if (!SUPPRESSED_NAMES.contains(displayName)) {
+                SoundCategories.LOGGER.error(
+                        "[%s] Duplicate enum name was found: '%s'.".formatted(SoundCategories.class.getSimpleName(), displayName),
+                        new RuntimeException("%s is already registered".formatted(displayName)));
+                SUPPRESSED_NAMES.add(displayName);
+            }
+            newCategory = REGISTERED_VARIANTS.get(displayName);
+        } else {
+            newCategory = soundcategories$newSoundCategory(varName, EDITING_CATS.get(EDITING_CATS.size() - 1).ordinal() + 1, displayName);
+        }
+
+        field.set(instance, newCategory);
+        if (!EDITING_CATS.contains(newCategory)) {
+            EDITING_CATS.add(newCategory);
+            REGISTERED_VARIANTS.put(displayName, newCategory);
+        }
+    }
+
+    /**
+     * Adds customized enum variant of {@link SoundCategory}.
+     */
     @Inject(method = "<clinit>", at = @At(value = "FIELD",
             opcode = Opcodes.PUTSTATIC,
             target = "Lnet/minecraft/sound/SoundCategory;field_15255:[Lnet/minecraft/sound/SoundCategory;",
             shift = At.Shift.AFTER))
-    private static void addCustomVariants(CallbackInfo ci)
-    {
-        ArrayList<SoundCategory> categories = new ArrayList<>(Arrays.asList(field_15255));
-        SoundCategories.getCategories().forEach((loader, fields) -> {
+    private static void soundcategories$addCustomVariants(CallbackInfo ci) {
+        REGISTERED_VARIANTS = Maps.newHashMap();
+        SUPPRESSED_NAMES = Lists.newArrayList();
+        EDITING_CATS = new ArrayList<>(Arrays.asList(field_15255));
+        for (SoundCategory category : EDITING_CATS) {
+            REGISTERED_VARIANTS.put(category.getName(), category);
+        }
+
+        SoundCategories.getCategories().forEach((container, fields) -> {
+            final String modId = container.getProvider().getMetadata().getId();
+            final CategoryLoader categoryLoader = container.getEntrypoint();
             fields.forEach(field -> {
-                var annotation = field.getAnnotation(CategoryLoader.Register.class);
-                var id = Objects.equals(annotation.id(), "") ? field.getName() : annotation.id();
-                try
-                {
-                    field.set(loader, addVariant(categories, id));
+                if (!field.getType().equals(SoundCategory.class)) {
+                    return;
                 }
-                catch (IllegalAccessException e)
-                {
-                    LogManager.getLogger().warn("Failed to register sound category with ID {}", id);
-                    e.printStackTrace();
+
+                final CategoryLoader.Register annotation = field.getAnnotation(CategoryLoader.Register.class);
+                final String id = annotation.id().isEmpty() ? field.getName() : annotation.id();
+                final String varName = "%s$%s".formatted(modId, id).replaceAll(INVALID_VAR_NAME_REGEX, "_");
+                try {
+                    soundcategories$tryMakeVariant(field, categoryLoader, varName);
+                } catch (Throwable ex) {
+                    SoundCategories.LOGGER.error(
+                            "[%s] Failed to register SoundCategory with ID '%s'".formatted(SoundCategories.class.getSimpleName(), varName), ex);
                 }
             });
         });
 
-        field_15255 = categories.toArray(new SoundCategory[0]);
-    }
+        // Set the new enums.
+        field_15255 = EDITING_CATS.toArray(SoundCategory[]::new);
 
-    private static SoundCategory addVariant(ArrayList<SoundCategory> categories, String name)
-    {
-        SoundCategory cat = newSoundCategory(name.toUpperCase(Locale.ROOT),
-                                             categories.get(categories.size() - 1).ordinal() + 1,
-                                             name.toLowerCase(Locale.ROOT));
-        categories.add(cat);
-        return cat;
+        // Cleanup.
+        EDITING_CATS.clear();
+        SUPPRESSED_NAMES.clear();
+        REGISTERED_VARIANTS.clear();
     }
 }
