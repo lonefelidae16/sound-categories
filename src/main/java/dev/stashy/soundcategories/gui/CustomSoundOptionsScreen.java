@@ -27,18 +27,21 @@ public class CustomSoundOptionsScreen extends GameOptionsScreen {
         this.list = new SoundList(this.client, this.width, this.height, 32, this.height - 32, 25);
         this.list.addCategory(SoundCategory.MASTER);
         SoundCategory[] cats = Arrays.stream(SoundCategory.values()).filter(it -> {
-            return !SoundCategories.PARENTS.containsKey(it) && !SoundCategories.PARENTS.containsValue(it);
-        }).skip(1).toArray(SoundCategory[]::new);
+            return !SoundCategories.PARENTS.containsKey(it) &&
+                    !SoundCategories.PARENTS.containsValue(it) &&
+                    it != SoundCategory.MASTER;
+        }).toArray(SoundCategory[]::new);
         var count = cats.length;
-        for (int i = 0; i < Math.ceil(count); i += 2) {
+        for (int i = 0; i < count; i += 2) {
             list.addDoubleCategory(cats[i], i + 1 < count ? cats[i + 1] : null);
         }
         this.list.addSingleOptionEntry(gameOptions.getSoundDevice());
         this.list.addAll(new SimpleOption[]{gameOptions.getShowSubtitles(), gameOptions.getDirectionalAudio()});
 
-        Arrays.stream(SoundCategory.values()).filter(SoundCategories.PARENTS::containsValue).forEach(it -> {
-            this.list.addGroup(it, button -> this.client.setScreen(new SoundGroupOptionsScreen(this, gameOptions, it)));
-        });
+        for (String key : SoundCategories.MASTER_CLASSES) {
+            final SoundCategory category = SoundCategories.MASTERS.get(key);
+            this.list.addGroup(category, button -> this.client.setScreen(new SoundGroupOptionsScreen(this, gameOptions, category)));
+        }
 
         this.addSelectableChild(this.list);
 

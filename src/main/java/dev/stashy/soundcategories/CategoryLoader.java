@@ -5,15 +5,30 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-public interface CategoryLoader
-{
+/**
+ * The enum modifier API that defines your unique {@link net.minecraft.sound.SoundCategory}.
+ */
+public interface CategoryLoader {
     /**
-     * Registers a SoundCategory and injects its reference to the field that has this annotation.
+     * Registers a new {@link net.minecraft.sound.SoundCategory} and injects its reference to the field that has this annotation.<br>
+     * The field name will be prefixed your modId and <code>$</code>, like following:<br>
+     * <ul>
+     *     <li>Declared by <code>mod-id</code><br>
+     *     <pre>class CustomCats implements CategoryLoader {<br>    @Register<br>    public static SoundCategory MASTER;<br>}</pre></li>
+     *     <li>Generated code at runtime<br>
+     *     <pre>SoundCategory.MOD_ID$MASTER("mod_id$master");</pre></li>
+     * </ul>
+     * In this case, the translation key will be <code>"soundCategory.mod_id$master"</code>. You can access this SoundCategory using <code>CustomCats.MASTER</code> directly.
+     *
+     * @see Register#id
+     * @see Register#master
+     * @see Register#defaultLevel
+     * @see Register#toggle
+     * @see Register#tooltip
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    @interface Register
-    {
+    @interface Register {
         /**
          * The ID of the sound category - if omitted, will be automatically set from the field name.
          */
@@ -21,8 +36,8 @@ public interface CategoryLoader
 
         /**
          * Sets the SoundCategory of a field to be the master category.<br>
-         * All categories defined after it will become grouped within the master,
-         * and their volumes will be multiplied with the master category's volume level.
+         * It can be declared only once in your class and grouped within the master.<br>
+         * To create multiple master categories, please create separate classes.
          */
         boolean master() default false;
 
@@ -37,7 +52,8 @@ public interface CategoryLoader
         boolean toggle() default false;
 
         /**
-         * Sets tooltip to be displayed on mouse hover.
+         * Sets tooltip to be displayed on mouse hover.<br>
+         * This value will be passed to {@link net.minecraft.text.Text#translatable}.
          */
         String tooltip() default "";
     }

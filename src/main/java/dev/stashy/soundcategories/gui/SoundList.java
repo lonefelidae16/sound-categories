@@ -58,7 +58,7 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
     }
 
     public int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction) {
-        return super.addEntry(SoundEntry.createGroup(this.client.options, this.client.options.getSoundVolumeOption(group), this.width, pressAction));
+        return super.addEntry(SoundEntry.createGroup(this.client.options, this.createCustomizedOption(group), this.width, pressAction));
     }
 
     public int getRowWidth() {
@@ -121,9 +121,9 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            this.widgets.forEach((s) -> {
-                s.setY(y);
-                s.render(matrices, mouseX, mouseY, tickDelta);
+            this.widgets.forEach(widget -> {
+                widget.setY(y);
+                widget.render(matrices, mouseX, mouseY, tickDelta);
             });
         }
     }
