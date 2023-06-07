@@ -1,15 +1,25 @@
 # Changelog
 
 ## [Unreleased]
+### ⌛ Coming
+
+* <small>_Exciting new features may be coming here._</small>
+
+### 💭 Bugs / Issues
+
+* <small>_Caught bugs and known issues will be written._</small>
+
+## [1.2.4+1.20-build.1] - 2023-06-08
 ### ✨ Added
 
 * Port to 1.20.
 
 ### 👷 Technical
 
-* Uses Gradle 8.1.1.
-* Uses fabric-loom 1.2.
-* Uses fabric-loader 0.14.20.
+* Dependency updates:
+  - Gradle 8.1.1
+  - fabric-loom 1.2
+  - fabric-loader 0.14.21
 * Updates the API specification.
   - The "master" category now includes its class info and can be sorted by class name,
     and can only be specified once per class.
@@ -35,9 +45,10 @@
 
 ### 👷 Technical
 
-* Uses Java 17.
-* Uses Gradle 8.0.1.
-* Uses fabric-loom 1.1.
+* Dependency updates:
+  - Java 17
+  - Gradle 8.0.1
+  - fabric-loom 1.1
 
 ## [1.2.4+1.19.3-SNAPSHOT]
 ### ✨ Added
