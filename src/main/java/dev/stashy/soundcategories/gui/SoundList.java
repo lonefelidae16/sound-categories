@@ -4,6 +4,7 @@ import dev.stashy.soundcategories.SoundCategories;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -13,7 +14,6 @@ import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
@@ -120,10 +120,10 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
         }
 
         @Override
-        public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            this.widgets.forEach(widget -> {
-                widget.setY(y);
-                widget.render(matrices, mouseX, mouseY, tickDelta);
+        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            this.widgets.forEach((s) -> {
+                s.setY(y);
+                s.render(context, mouseX, mouseY, tickDelta);
             });
         }
     }
