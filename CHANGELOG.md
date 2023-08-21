@@ -11,7 +11,7 @@
 <!--* <small>_Caught bugs and known issues will be written._</small>-->
 * Dependency updates are available:
   - fabric-loom 1.3
-  - Gradle 8.2.1
+  - Gradle 8.3
 * Bigger `Done` button than on the vanilla settings screen.
 
 ## [1.2.4+1.20-build.1] - 2023-06-08
