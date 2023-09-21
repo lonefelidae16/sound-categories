@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -106,8 +107,7 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
             return new SoundEntry(
                     List.of(
                             group.createWidget(options, width / 2 - 155, 0, 285),
-                            new TexturedButtonWidget(width / 2 + 135, 0, 20, 20, 0, 0, 20,
-                                    SoundCategories.SETTINGS_ICON, 20, 40, pressAction)
+                            new TexturedButtonWidget(width / 2 + 135, 0, 20, 20, SoundCategories.SETTINGS_ICON, pressAction)
                     ));
         }
 

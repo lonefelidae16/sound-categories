@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
+import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 public class SoundCategories implements PreLaunchEntrypoint {
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final String MOD_ID = "soundcategories";
     private static final List<String> SUPPRESSED_NAMES = Lists.newArrayList();
 
     /**
@@ -38,7 +40,12 @@ public class SoundCategories implements PreLaunchEntrypoint {
     public static final Map<SoundCategory, Boolean> TOGGLEABLE_CATS = Maps.newHashMap();
     public static final Map<SoundCategory, Text> TOOLTIPS = Maps.newHashMap();
 
-    public static final Identifier SETTINGS_ICON = new Identifier("soundcategories", "textures/gui/settings.png");
+    public static final ButtonTextures SETTINGS_ICON = new ButtonTextures(
+            new Identifier(MOD_ID, "settings/button"),
+            new Identifier(MOD_ID, "settings/disabled"),
+            new Identifier(MOD_ID, "settings/hover"),
+            new Identifier(MOD_ID, "settings/disabled")
+    );
 
     /**
      * Retrieves all {@link EntrypointContainer} from the key <code>"sound-categories"</code> and their annotation fields.

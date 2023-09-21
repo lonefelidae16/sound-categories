@@ -47,11 +47,14 @@ public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
     }
 
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
         if (this.list != null) {
             this.list.render(context, mouseX, mouseY, delta);
         }
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 5, 0xffffff);
-        super.render(context, mouseX, mouseY, delta);
+    }
+
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackgroundTexture(context);
     }
 }
