@@ -9,7 +9,7 @@
 
 * <small>_Caught bugs and known issues are written._</small>
 
-## [1.2.4+1.20.2-build.1] - 2023-06-08
+## [1.2.4+1.20.2-build.1] - 2023-09-22
 ### ✨ Added
 
 * Port to 1.20.2.
