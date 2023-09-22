@@ -3,16 +3,26 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-<!-- * <small>_Exciting new features may be coming here._</small> -->
-* Port to 1.20.2.
+* <small>_Exciting new features may be coming here._</small>
 
 ### 💭 Bugs / Issues
 
-<!--* <small>_Caught bugs and known issues will be written._</small>-->
-* Dependency updates are available:
-  - fabric-loom 1.3
+* <small>_Caught bugs and known issues are written._</small>
+
+## [1.2.4+1.20.2-build.1] - 2023-06-08
+### ✨ Added
+
+* Port to 1.20.2.
+
+### 🔧 Fixed
+
+* Shrink `Done` button width to fit vanilla screen.
+
+### 👷 Technical
+
+* Dependency updates:
   - Gradle 8.3
-* Bigger `Done` button than on the vanilla settings screen.
+  - fabric-loom 1.3
 
 ## [1.2.4+1.20-build.1] - 2023-06-08
 ### ✨ Added
