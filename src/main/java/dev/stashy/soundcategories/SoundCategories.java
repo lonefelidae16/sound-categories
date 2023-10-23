@@ -155,7 +155,7 @@ public class SoundCategories implements PreLaunchEntrypoint {
                     }
                 }
             }
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             LOGGER.error("[%s] Unexpected error has caught".formatted(SoundCategories.class.getSimpleName()), ex);
         }
 

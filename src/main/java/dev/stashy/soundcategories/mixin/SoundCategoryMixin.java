@@ -102,7 +102,7 @@ public class SoundCategoryMixin {
                 final String varName = "%s$%s".formatted(modId, id).replaceAll(INVALID_VAR_NAME_REGEX, "_");
                 try {
                     soundcategories$tryMakeVariant(field, categoryLoader, varName);
-                } catch (Throwable ex) {
+                } catch (Exception ex) {
                     SoundCategories.LOGGER.error(
                             "[%s] Failed to register SoundCategory with ID '%s'".formatted(SoundCategories.class.getSimpleName(), varName), ex);
                 }
