@@ -7,6 +7,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class SoundGroupOptionsScreen extends AbstractSoundListedScreen {
     private final SoundCategory parentCategory;
@@ -16,8 +17,16 @@ public class SoundGroupOptionsScreen extends AbstractSoundListedScreen {
         parentCategory = category;
     }
 
+    @Override
     protected void init() {
-        this.list = new SoundList(this.client, this.width, this.height, 32, this.height - 32, 25);
+        super.init();
+
+        try {
+            Objects.requireNonNull(this.list);
+        } catch (NullPointerException ex) {
+            SoundCategories.LOGGER.error("Error during screen initialization", ex);
+            return;
+        }
 
         this.list.addCategory(parentCategory);
 
@@ -27,7 +36,5 @@ public class SoundGroupOptionsScreen extends AbstractSoundListedScreen {
         this.list.addAllCategory(categories);
 
         this.addSelectableChild(this.list);
-
-        this.addDoneButton();
     }
 }

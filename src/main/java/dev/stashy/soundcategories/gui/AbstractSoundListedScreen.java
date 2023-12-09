@@ -15,6 +15,12 @@ public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
         super(parent, gameOptions, title);
     }
 
+    @Override
+    protected void init() {
+        this.list = new SoundList(this.client, this.width, this.height - 64, 32, 25);
+        this.addDoneButton();
+    }
+
     protected void addDoneButton() {
         addDoneButton(false);
     }
@@ -51,7 +57,7 @@ public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
         if (this.list != null) {
             this.list.render(context, mouseX, mouseY, delta);
         }
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 5, 0xffffff);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xffffff);
     }
 
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {

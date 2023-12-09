@@ -10,6 +10,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class CustomSoundOptionsScreen extends AbstractSoundListedScreen {
@@ -17,8 +18,17 @@ public class CustomSoundOptionsScreen extends AbstractSoundListedScreen {
         super(parent, options, Text.translatable("options.sounds.title"));
     }
 
+    @Override
     protected void init() {
-        this.list = new SoundList(this.client, this.width, this.height, 32, this.height - 32, 25);
+        super.init();
+
+        try {
+            Objects.requireNonNull(this.list);
+        } catch (NullPointerException ex) {
+            SoundCategories.LOGGER.error("Error during screen initialization", ex);
+            return;
+        }
+
         this.list.addCategory(SoundCategory.MASTER);
         SoundCategory[] cats = Arrays.stream(SoundCategory.values()).filter(it -> {
             return !SoundCategories.PARENTS.containsKey(it) &&
@@ -38,7 +48,5 @@ public class CustomSoundOptionsScreen extends AbstractSoundListedScreen {
         }
 
         this.addSelectableChild(this.list);
-
-        this.addDoneButton();
     }
 }

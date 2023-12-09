@@ -7,7 +7,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -25,8 +24,8 @@ import java.util.List;
 
 public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
 
-    public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {
-        super(minecraftClient, i, j, k, l, m);
+    public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l) {
+        super(minecraftClient, i, j, k, l);
         this.centerListVertically = false;
     }
 
