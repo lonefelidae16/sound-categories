@@ -3,11 +3,22 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-* <small>_Exciting new features may be coming here._</small>
+<!-- <small>_Exciting new features may be coming here._</small> -->
 
 ### 💭 Bugs / Issues
 
-* <small>_Caught bugs and known issues are written._</small>
+<small>_Caught bugs and known issues are written._</small>
+
+## [1.2.4+1.20.4-build.1] - 2023-12-09
+### ✨ Added
+
+* Port to 1.20.4.
+
+### 👷 Technical
+
+* Dependency updates:
+  - Gradle 8.4
+  - fabric-loom 1.4
 
 ## [1.2.4+1.20.2-build.1] - 2023-09-22
 ### ✨ Added
