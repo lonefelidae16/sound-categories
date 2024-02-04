@@ -4,11 +4,12 @@ plugins {
     id "com.matthewprenger.cursegradle"
     id "com.modrinth.minotaur"
     id "org.jetbrains.changelog"
+    id 'com.palantir.git-version'
 }
 
 var targetJdk = 17
 
-version = "${project.mod_version}+${rootProject.minecraft_version}"
+version = "${project.mod_version}+${rootProject.minecraft_version}~lonefelidae16-git+${versionDetails().gitHash[0..7]}"
 group = project.maven_group
 
 base {
@@ -65,7 +66,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${base.archivesName}" }
+        rename { "${it}_${project.archives_base_name}" }
     }
 }
 
