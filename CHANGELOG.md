@@ -4,6 +4,10 @@
 ### ⌛ Coming
 
 <!-- <small>_Exciting new features may be coming here._</small> -->
+* Dependency updates are available.
+  - Gradle 8.5
+  - fabric-loom 1.5
+* Append Git commit hash to version.
 
 ### 💭 Bugs / Issues
 
