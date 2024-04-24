@@ -3,15 +3,25 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-<!-- <small>_Exciting new features may be coming here._</small> -->
-* Dependency updates are available.
-  - Gradle 8.5
-  - fabric-loom 1.5
-* Append Git commit hash to version.
+<small>_Exciting new features may be coming here._</small>
 
 ### 💭 Bugs / Issues
 
 <small>_Caught bugs and known issues are written._</small>
+
+## [1.2.4+1.20.5-build.1] - 2024-04-24
+### ✨ Added
+
+* Port to 1.20.5.
+
+### 👷 Technical
+
+* Dependency updates:
+  - Gradle 8.7
+  - fabric-loom 1.6
+  - Java 21
+* Append Git commit hash to version.
+
 
 ## [1.2.4+1.20.4-build.1] - 2023-12-09
 ### ✨ Added
