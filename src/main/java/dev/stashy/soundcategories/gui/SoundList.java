@@ -30,7 +30,15 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
     }
 
     public int addSingleOptionEntry(SimpleOption<?> option) {
-        return this.addEntry(SoundEntry.create(this.client.options, this.width, option));
+        return this.addSingleOptionEntry(option, true);
+    }
+
+    public int addSingleOptionEntry(SimpleOption<?> option, boolean editable) {
+        var entry = SoundEntry.create(this.client.options, this.width, option);
+        if (!editable) {
+            entry.widgets.forEach(widget -> widget.active = false);
+        }
+        return this.addEntry(entry);
     }
 
     public int addOptionEntry(SimpleOption<?> firstOption, @Nullable SimpleOption<?> secondOption) {
@@ -45,6 +53,10 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
 
     public int addCategory(SoundCategory cat) {
         return this.addSingleOptionEntry(this.createCustomizedOption(cat));
+    }
+
+    public int addReadOnlyCategory(SoundCategory cat) {
+        return this.addSingleOptionEntry(this.createCustomizedOption(cat), false);
     }
 
     public int addDoubleCategory(SoundCategory first, @Nullable SoundCategory second) {
@@ -63,10 +75,6 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
 
     public int getRowWidth() {
         return 400;
-    }
-
-    protected int getScrollbarPositionX() {
-        return super.getScrollbarPositionX() + 32;
     }
 
     private SimpleOption<?> createCustomizedOption(SoundCategory category) {

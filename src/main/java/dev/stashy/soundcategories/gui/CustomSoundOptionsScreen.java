@@ -35,10 +35,7 @@ public class CustomSoundOptionsScreen extends AbstractSoundListedScreen {
                     !SoundCategories.PARENTS.containsValue(it) &&
                     it != SoundCategory.MASTER;
         }).toArray(SoundCategory[]::new);
-        var count = cats.length;
-        for (int i = 0; i < count; i += 2) {
-            list.addDoubleCategory(cats[i], i + 1 < count ? cats[i + 1] : null);
-        }
+        this.list.addAllCategory(cats);
         this.list.addSingleOptionEntry(gameOptions.getSoundDevice());
         this.list.addAll(new SimpleOption[]{gameOptions.getShowSubtitles(), gameOptions.getDirectionalAudio()});
 

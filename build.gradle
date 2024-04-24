@@ -7,7 +7,7 @@ plugins {
     id 'com.palantir.git-version'
 }
 
-var targetJdk = 17
+var targetJdk = 21
 
 version = "${project.mod_version}+${rootProject.minecraft_version}~lonefelidae16-git+${versionDetails().gitHash[0..7]}"
 group = project.maven_group

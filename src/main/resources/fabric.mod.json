@@ -23,7 +23,7 @@
   },
   "depends": {
     "fabricloader": "*",
-    "minecraft": "~1.20.3",
+    "minecraft": "~1.20.5",
     "fabric": "*"
   },
   "accessWidener": "soundcategories.accesswidener"

@@ -28,7 +28,7 @@ public class SoundGroupOptionsScreen extends AbstractSoundListedScreen {
             return;
         }
 
-        this.list.addCategory(parentCategory);
+        this.list.addReadOnlyCategory(parentCategory);
 
         final SoundCategory[] categories = Arrays.stream(SoundCategory.values()).filter(it -> {
             return SoundCategories.PARENTS.containsKey(it) && SoundCategories.PARENTS.get(it) == parentCategory;
