@@ -9,7 +9,7 @@
 
 <small>_Caught bugs and known issues are written._</small>
 
-## [1.2.4+1.20.5-build.2] - 2024-04-24
+## [1.2.4+1.20.5-build.2] - 2024-05-14
 ### 🔧 Fixed
 
 * Screen widgets now fit window dimension.
