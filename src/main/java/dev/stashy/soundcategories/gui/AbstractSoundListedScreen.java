@@ -1,6 +1,5 @@
 package dev.stashy.soundcategories.gui;
 
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.option.GameOptions;
@@ -14,15 +13,14 @@ public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
     }
 
     @Override
-    protected void init() {
-        super.init();
-        this.list = new SoundList(this.client, this.width, this.height - 64, 32, 25);
+    protected void initTabNavigation() {
+        super.initTabNavigation();
+        this.list.setDimensions(this.width, this.layout.getContentHeight());
     }
 
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-        if (this.list != null) {
-            this.list.render(context, mouseX, mouseY, delta);
-        }
+    @Override
+    protected void init() {
+        this.list = new SoundList(this.client, this.width, this.height - 64, 32, 25);
+        super.init();
     }
 }

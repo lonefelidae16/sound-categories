@@ -35,6 +35,6 @@ public class SoundGroupOptionsScreen extends AbstractSoundListedScreen {
         }).toArray(SoundCategory[]::new);
         this.list.addAllCategory(categories);
 
-        this.addSelectableChild(this.list);
+        this.addDrawableChild(this.list);
     }
 }

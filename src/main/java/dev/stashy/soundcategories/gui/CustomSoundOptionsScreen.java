@@ -44,6 +44,6 @@ public class CustomSoundOptionsScreen extends AbstractSoundListedScreen {
             this.list.addGroup(category, button -> this.client.setScreen(new SoundGroupOptionsScreen(this, gameOptions, category)));
         }
 
-        this.addSelectableChild(this.list);
+        this.addDrawableChild(this.list);
     }
 }

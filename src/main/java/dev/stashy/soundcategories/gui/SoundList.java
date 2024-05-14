@@ -113,7 +113,7 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
         public static SoundEntry createGroup(GameOptions options, SimpleOption<?> group, int width, ButtonWidget.PressAction pressAction) {
             return new SoundEntry(
                     List.of(
-                            group.createWidget(options, width / 2 - 155, 0, 285),
+                            group.createWidget(options, width / 2 - 155, 0, 280),
                             new TexturedButtonWidget(width / 2 + 135, 0, 20, 20, SoundCategories.SETTINGS_ICON, pressAction)
                     ));
         }
@@ -128,10 +128,14 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
 
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            this.widgets.forEach((s) -> {
-                s.setY(y);
+            int i = 0;
+            int j = context.getScaledWindowWidth() / 2 - 155;
+
+            for (ClickableWidget s : this.widgets) {
+                s.setPosition(j + i, y);
                 s.render(context, mouseX, mouseY, tickDelta);
-            });
+                i += s.getWidth() + 10;
+            }
         }
     }
 }
