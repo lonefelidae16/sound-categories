@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "soundcategories",
+  "id": "soundcategories-${moduleId}-module",
   "version": "${version}",
-  "name": "Sound Categories",
+  "name": "Sound Categories ${moduleName}",
   "description": "Allows mods to define custom sound categories.",
   "authors": [
     "stashymane",
@@ -14,14 +14,13 @@
   },
   "license": "${mod_license}",
   "environment": "client",
+  "mixins": [
+  ],
   "entrypoints": {
-    "preLaunch": [
-      "dev.stashy.soundcategories.SoundCategoriesBootstrap"
-    ]
   },
   "depends": {
     "fabricloader": "*",
-    "minecraft": ">=1.20.3",
+    "minecraft": "*",
     "fabric": "*"
   }
 }

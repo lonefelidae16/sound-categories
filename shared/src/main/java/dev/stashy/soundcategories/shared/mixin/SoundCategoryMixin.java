@@ -1,9 +1,9 @@
-package dev.stashy.soundcategories.mixin;
+package dev.stashy.soundcategories.shared.mixin;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import dev.stashy.soundcategories.CategoryLoader;
-import dev.stashy.soundcategories.SoundCategories;
+import dev.stashy.soundcategories.shared.CategoryLoader;
+import dev.stashy.soundcategories.shared.SoundCategories;
 import net.minecraft.sound.SoundCategory;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 @Mixin(SoundCategory.class)
-public class SoundCategoryMixin {
+public abstract class SoundCategoryMixin {
     @SuppressWarnings("InvokerTarget")
     @Invoker("<init>")
     private static SoundCategory soundcategories$newSoundCategory(String internalName, int order, String name) {

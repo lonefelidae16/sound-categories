@@ -15,3 +15,5 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+include 'shared', 'versioned:1.20.5', 'versioned:1.20.3'

@@ -1,10 +1,10 @@
-package dev.stashy.soundcategories;
+package dev.stashy.soundcategories.shared;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
@@ -20,9 +20,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SoundCategories implements PreLaunchEntrypoint {
-    public static final Logger LOGGER = LogManager.getLogger();
+public final class SoundCategories {
+    public static final Logger LOGGER = LogManager.getLogger(
+            SoundCategories.class,
+            new PrefixableMessageFactory(SoundCategories.class.getSimpleName())
+    );
     public static final String MOD_ID = "soundcategories";
+    public static final String BASE_PACKAGE = "dev.stashy.soundcategories";
     private static final List<String> SUPPRESSED_NAMES = Lists.newArrayList();
 
     /**
@@ -41,10 +45,10 @@ public class SoundCategories implements PreLaunchEntrypoint {
     public static final Map<SoundCategory, Text> TOOLTIPS = Maps.newHashMap();
 
     public static final ButtonTextures SETTINGS_ICON = new ButtonTextures(
-            new Identifier(MOD_ID, "settings/button"),
-            new Identifier(MOD_ID, "settings/disabled"),
-            new Identifier(MOD_ID, "settings/hover"),
-            new Identifier(MOD_ID, "settings/disabled")
+            Identifier.of(MOD_ID, "settings/button"),
+            Identifier.of(MOD_ID, "settings/disabled"),
+            Identifier.of(MOD_ID, "settings/hover"),
+            Identifier.of(MOD_ID, "settings/disabled")
     );
 
     /**
@@ -70,8 +74,7 @@ public class SoundCategories implements PreLaunchEntrypoint {
         return "%s#%s".formatted(clazz.getCanonicalName(), field.getName());
     }
 
-    @Override
-    public void onPreLaunch() {
+    public static void setup() {
         //required so that the new categories are actually created, not actually used
         SoundCategory.MASTER.getClass().getClassLoader();
 

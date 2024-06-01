@@ -1,6 +1,7 @@
-package dev.stashy.soundcategories.gui;
+package dev.stashy.soundcategories.shared.gui;
 
-import dev.stashy.soundcategories.SoundCategories;
+import dev.stashy.soundcategories.shared.SoundCategories;
+import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -18,15 +19,26 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
-
-    public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l) {
+public abstract class VersionedSoundList extends ElementListWidget<VersionedSoundList.SoundEntry> {
+    public VersionedSoundList(MinecraftClient minecraftClient, int i, int j, int k, int l) {
         super(minecraftClient, i, j, k, l);
         this.centerListVertically = false;
+    }
+
+    public static VersionedSoundList newInstance(MinecraftClient client, int width, int height, int y, int itemHeight) {
+        try {
+            Class<VersionedSoundList> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE,"gui.SoundList");
+            Constructor<VersionedSoundList> init = clazz.getConstructor(MinecraftClient.class, int.class, int.class, int.class, int.class);
+            return init.newInstance(client, width, height, y, itemHeight);
+        } catch (Exception ex) {
+            SoundCategories.LOGGER.error("Cannot init SoundList.", ex);
+        }
+        return null;
     }
 
     public int addSingleOptionEntry(SimpleOption<?> option) {
@@ -73,6 +85,7 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
         return super.addEntry(SoundEntry.createGroup(this.client.options, this.createCustomizedOption(group), this.width, pressAction));
     }
 
+    @Override
     public int getRowWidth() {
         return 400;
     }
@@ -90,7 +103,7 @@ public class SoundList extends ElementListWidget<SoundList.SoundEntry> {
     }
 
     @Environment(EnvType.CLIENT)
-    protected static class SoundEntry extends ElementListWidget.Entry<SoundList.SoundEntry> {
+    protected static class SoundEntry extends ElementListWidget.Entry<VersionedSoundList.SoundEntry> {
         List<? extends ClickableWidget> widgets;
 
         public SoundEntry(List<? extends ClickableWidget> w) {

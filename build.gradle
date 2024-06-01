@@ -7,10 +7,22 @@ plugins {
     id 'com.palantir.git-version'
 }
 
-var targetJdk = 21
+var targetJdk = Integer.parseInt(rootProject.java_compiler_version)
 
-version = "${project.mod_version}+${rootProject.minecraft_version}~lonefelidae16-git+${versionDetails().gitHash[0..7]}"
-group = project.maven_group
+allprojects {
+    version = "${project.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
+    group = project.maven_group
+
+    repositories {
+        maven {
+            name = "stashymane's repo"
+            url = "https://repo.stashy.dev"
+        }
+        maven {
+            url = "https://artifactory.kow08absty.com/artifactory/fabricmc"
+        }
+    }
+}
 
 base {
     archivesName = project.archives_base_name
@@ -26,10 +38,32 @@ if (split.length == 3 && !rootProject.minecraft_version.contains("-")) {
         compatibleWith.add(base + "." + i)
 } else compatibleWith.add(rootProject.minecraft_version)
 
-repositories {
-    maven {
-        name = "stashymane's repo"
-        url = "https://repo.stashy.dev"
+allprojects {
+    project.ext['moduleId'] = 'unnamed'
+    project.ext['moduleName'] = ''
+    project.ext['mod_license'] = project.mod_license
+
+    tasks.withType(ProcessResources).configureEach {
+        doFirst {
+            var props = [
+                    "mod_page",
+                    "mod_sources",
+//                    "mod_issues"
+            ].collectEntries {
+                [it, project.properties[it]]
+            }
+
+            props.putAll([
+                    'moduleId': project.ext['moduleId'],
+                    'moduleName': project.ext['moduleName'],
+                    'mod_license': project.ext['mod_license'],
+                    'version': project.version
+            ])
+
+            filesMatching("fabric.mod.json") {
+                expand props
+            }
+        }
     }
 }
 
@@ -38,18 +72,11 @@ dependencies {
     mappings "net.fabricmc:yarn:${rootProject.minecraft_version}${rootProject.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
-}
+    modImplementation include("me.lonefelidae16:groominglib:${rootProject.groom_version}")
 
-loom {
-    accessWidenerPath = file("src/main/resources/soundcategories.accesswidener")
-}
-
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+    implementation include(project(path: 'shared', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.20.5', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.20.3', configuration: 'namedElements'))
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -92,48 +119,4 @@ publishing {
             }
         }
     }
-}
-
-changelog {
-    version = project.mod_version
-}
-
-curseforge {
-    apiKey = System.getenv("CURSE_API_KEY") ?: ""
-    project {
-        id = "557374"
-        changelog = project.changelog.get(project.mod_version).toHTML()
-        changelogType = "html"
-        releaseType = "release"
-        for (String ver : compatibleWith)
-            addGameVersion ver
-
-        mainArtifact(remapJar) {
-            displayName = "$project.mod_version for $rootProject.minecraft_version"
-            relations {
-                requiredDependency("fabric-api")
-            }
-        }
-    }
-
-    options {
-        forgeGradleIntegration = false
-        detectNewerJava = true
-    }
-}
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN") ?: ""
-    changelog = project.changelog.get(project.mod_version).toText()
-    projectId = "GROGt4v1"
-    versionNumber = version
-    versionName = "$project.mod_version for $rootProject.minecraft_version"
-    uploadFile = remapJar
-    gameVersions = compatibleWith
-    loaders = ["fabric"]
-}
-
-task publishMod() {
-    dependsOn(tasks.modrinth)
-    dependsOn(tasks.curseforge)
 }

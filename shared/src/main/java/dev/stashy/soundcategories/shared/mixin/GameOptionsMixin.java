@@ -1,6 +1,6 @@
-package dev.stashy.soundcategories.mixin;
+package dev.stashy.soundcategories.shared.mixin;
 
-import dev.stashy.soundcategories.SoundCategories;
+import dev.stashy.soundcategories.shared.SoundCategories;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;

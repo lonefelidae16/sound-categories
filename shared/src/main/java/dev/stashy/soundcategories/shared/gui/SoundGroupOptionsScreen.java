@@ -1,6 +1,6 @@
-package dev.stashy.soundcategories.gui;
+package dev.stashy.soundcategories.shared.gui;
 
-import dev.stashy.soundcategories.SoundCategories;
+import dev.stashy.soundcategories.shared.SoundCategories;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.sound.SoundCategory;
@@ -28,7 +28,7 @@ public class SoundGroupOptionsScreen extends AbstractSoundListedScreen {
             return;
         }
 
-        this.list.addReadOnlyCategory(parentCategory);
+        this.list.addCategory(parentCategory);
 
         final SoundCategory[] categories = Arrays.stream(SoundCategory.values()).filter(it -> {
             return SoundCategories.PARENTS.containsKey(it) && SoundCategories.PARENTS.get(it) == parentCategory;

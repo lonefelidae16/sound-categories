@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "soundcategories-shared",
+  "version": "${version}",
+  "name": "Sound Categories shared module",
+  "description": "Allows mods to define custom sound categories.",
+  "authors": [
+    "stashymane",
+    "lonefelidae16"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/sound-categories",
+    "sources": "https://github.com/stashingco/sound-categories/"
+  },
+  "license": "${mod_license}",
+  "environment": "client",
+  "mixins": [
+    "soundcategories.shared.mixins.json"
+  ],
+  "entrypoints": {
+  },
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "*",
+    "fabric": "*"
+  },
+  "accessWidener": "soundcategories.accesswidener"
+}
