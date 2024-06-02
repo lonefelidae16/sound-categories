@@ -36,7 +36,7 @@ public abstract class VersionedSoundList extends ElementListWidget<VersionedSoun
             Constructor<VersionedSoundList> init = clazz.getConstructor(MinecraftClient.class, int.class, int.class, int.class, int.class);
             return init.newInstance(client, width, height, y, itemHeight);
         } catch (Exception ex) {
-            SoundCategories.LOGGER.error("Cannot init SoundList.", ex);
+            SoundCategories.LOGGER.error("Cannot instantiate 'SoundList'", ex);
         }
         return null;
     }

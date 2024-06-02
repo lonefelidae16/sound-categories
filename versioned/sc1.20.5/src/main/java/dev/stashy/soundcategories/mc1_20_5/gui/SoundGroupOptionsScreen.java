@@ -1,26 +1,21 @@
-package dev.stashy.soundcategories.shared.gui;
+package dev.stashy.soundcategories.mc1_20_5.gui;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
+import dev.stashy.soundcategories.shared.gui.VersionedSoundGroupOptionsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-public class SoundGroupOptionsScreen extends AbstractSoundListedScreen {
-    private final SoundCategory parentCategory;
-
+public class SoundGroupOptionsScreen extends VersionedSoundGroupOptionsScreen {
     public SoundGroupOptionsScreen(Screen parent, GameOptions gameOptions, SoundCategory category) {
-        super(parent, gameOptions, Text.translatable("soundCategory." + category.getName()));
-        parentCategory = category;
+        super(parent, gameOptions, category);
     }
 
     @Override
-    protected void init() {
-        super.init();
-
+    protected void setupWidgets() {
         try {
             Objects.requireNonNull(this.list);
         } catch (NullPointerException ex) {
@@ -28,7 +23,7 @@ public class SoundGroupOptionsScreen extends AbstractSoundListedScreen {
             return;
         }
 
-        this.list.addCategory(parentCategory);
+        this.list.addReadOnlyCategory(parentCategory);
 
         final SoundCategory[] categories = Arrays.stream(SoundCategory.values()).filter(it -> {
             return SoundCategories.PARENTS.containsKey(it) && SoundCategories.PARENTS.get(it) == parentCategory;

@@ -55,6 +55,5 @@ public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
     protected void init() {
         this.list = VersionedSoundList.newInstance(this.client, this.width, this.height - 64, 32, 25);
         super.init();
-        this.addDoneButton();
     }
 }

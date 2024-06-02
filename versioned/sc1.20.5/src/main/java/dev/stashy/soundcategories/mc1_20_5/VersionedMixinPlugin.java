@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.v1_20_5;
+package dev.stashy.soundcategories.mc1_20_5;
 
 import me.lonefelidae16.groominglib.api.AbstractVersionedMixinPlugin;
 

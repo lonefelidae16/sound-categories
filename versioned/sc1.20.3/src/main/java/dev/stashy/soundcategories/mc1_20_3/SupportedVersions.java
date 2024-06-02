@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.v1_20_3;
+package dev.stashy.soundcategories.mc1_20_3;
 
 public interface SupportedVersions {
     CharSequence START = "1.20.3";

@@ -1,7 +1,7 @@
 package dev.stashy.soundcategories.shared.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import dev.stashy.soundcategories.shared.gui.CustomSoundOptionsScreen;
+import dev.stashy.soundcategories.shared.gui.VersionedSoundOptionsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.option.GameOptions;
@@ -17,6 +17,6 @@ public class SoundSettingsMixin {
 
     @ModifyReturnValue(method = "method_19829", at = @At("RETURN"))
     private Screen soundcategories$redirectToCustomScreen(Screen original) {
-        return new CustomSoundOptionsScreen(OptionsScreen.class.cast(this), settings);
+        return VersionedSoundOptionsScreen.newInstance(OptionsScreen.class.cast(this), settings);
     }
 }

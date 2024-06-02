@@ -9,8 +9,8 @@
     "lonefelidae16"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/sound-categories",
-    "sources": "https://github.com/stashingco/sound-categories/"
+    "homepage": "${mod_page}",
+    "sources": "${mod_sources}"
   },
   "license": "${mod_license}",
   "environment": "client",

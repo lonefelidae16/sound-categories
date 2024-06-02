@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.v1_20_3.gui;
+package dev.stashy.soundcategories.mc1_20_3.gui;
 
 import dev.stashy.soundcategories.shared.gui.VersionedSoundList;
 import net.minecraft.client.MinecraftClient;

@@ -1,6 +1,7 @@
 package dev.stashy.soundcategories.shared.gui;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
+import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
@@ -9,13 +10,25 @@ import net.minecraft.client.option.SimpleOption;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
-public class CustomSoundOptionsScreen extends AbstractSoundListedScreen {
-    public CustomSoundOptionsScreen(Screen parent, GameOptions options) {
+public abstract class VersionedSoundOptionsScreen extends AbstractSoundListedScreen {
+    public VersionedSoundOptionsScreen(Screen parent, GameOptions options) {
         super(parent, options, Text.translatable("options.sounds.title"));
+    }
+
+    public static VersionedSoundOptionsScreen newInstance(Screen parent, GameOptions settings) {
+        try {
+            Class<VersionedSoundOptionsScreen> screen = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "gui.CustomSoundOptionsScreen");
+            Constructor<VersionedSoundOptionsScreen> constructor = screen.getConstructor(Screen.class, GameOptions.class);
+            return constructor.newInstance(parent, settings);
+        } catch (Exception ex) {
+            SoundCategories.LOGGER.error("Cannot instantiate 'CustomSoundOptionsScreen'", ex);
+        }
+        return null;
     }
 
     @Override
@@ -41,7 +54,7 @@ public class CustomSoundOptionsScreen extends AbstractSoundListedScreen {
 
         for (String key : SoundCategories.MASTER_CLASSES) {
             final SoundCategory category = SoundCategories.MASTERS.get(key);
-            this.list.addGroup(category, button -> this.client.setScreen(new SoundGroupOptionsScreen(this, gameOptions, category)));
+            this.list.addGroup(category, button -> this.client.setScreen(VersionedSoundGroupOptionsScreen.newInstance(this, gameOptions, category)));
         }
 
         this.addDrawableChild(this.list);
