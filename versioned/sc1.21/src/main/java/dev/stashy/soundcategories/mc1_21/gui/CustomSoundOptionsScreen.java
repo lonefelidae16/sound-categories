@@ -16,6 +16,6 @@ public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return this.list.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return this.list.mouseScrolledImpl(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 }

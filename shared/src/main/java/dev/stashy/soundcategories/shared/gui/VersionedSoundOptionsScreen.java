@@ -4,6 +4,9 @@ import dev.stashy.soundcategories.shared.SoundCategories;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
@@ -57,6 +60,6 @@ public abstract class VersionedSoundOptionsScreen extends AbstractSoundListedScr
             this.list.addGroup(category, button -> this.client.setScreen(VersionedSoundGroupOptionsScreen.newInstance(this, gameOptions, category)));
         }
 
-        this.addDrawableChild(this.list);
+        this.addDrawableChild((Element & Drawable & Selectable) this.list);
     }
 }

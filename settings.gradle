@@ -16,4 +16,5 @@ pluginManagement {
     }
 }
 
-include 'shared', 'versioned:1.20.5', 'versioned:1.20.3'
+include 'shared', 'versioned:1.21',
+        'versioned:1.20.5', 'versioned:1.20.3'

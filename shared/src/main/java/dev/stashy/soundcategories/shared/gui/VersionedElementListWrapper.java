@@ -19,79 +19,53 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
-public abstract class VersionedSoundList extends ElementListWidget<VersionedSoundList.SoundEntry> {
-    public VersionedSoundList(MinecraftClient minecraftClient, int i, int j, int k, int l) {
-        super(minecraftClient, i, j, k, l);
-        this.centerListVertically = false;
-    }
-
-    public static VersionedSoundList newInstance(MinecraftClient client, int width, int height, int y, int itemHeight) {
+public interface VersionedElementListWrapper {
+    static VersionedElementListWrapper newInstance(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
         try {
-            Class<VersionedSoundList> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE,"gui.SoundList");
-            Constructor<VersionedSoundList> init = clazz.getConstructor(MinecraftClient.class, int.class, int.class, int.class, int.class);
-            return init.newInstance(client, width, height, y, itemHeight);
+            Class<VersionedElementListWrapper> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE,"gui.SoundList");
+            Method init = clazz.getMethod("init", MinecraftClient.class, int.class, int.class, int.class, int.class, int.class);
+            return (VersionedElementListWrapper) init.invoke(null, client, width, height, top, bottom, itemHeight);
         } catch (Exception ex) {
             SoundCategories.LOGGER.error("Cannot instantiate 'SoundList'", ex);
         }
         return null;
     }
 
-    public int addSingleOptionEntry(SimpleOption<?> option) {
+    default int addSingleOptionEntry(SimpleOption<?> option) {
         return this.addSingleOptionEntry(option, true);
     }
 
-    public int addSingleOptionEntry(SimpleOption<?> option, boolean editable) {
-        var entry = SoundEntry.create(this.client.options, this.width, option);
-        if (!editable) {
-            entry.widgets.forEach(widget -> widget.active = false);
-        }
-        return this.addEntry(entry);
-    }
+    int addSingleOptionEntry(SimpleOption<?> option, boolean editable);
 
-    public int addOptionEntry(SimpleOption<?> firstOption, @Nullable SimpleOption<?> secondOption) {
-        return this.addEntry(SoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
-    }
+    int addOptionEntry(SimpleOption<?> firstOption, @Nullable SimpleOption<?> secondOption);
 
-    public void addAll(SimpleOption<?>[] options) {
+    default void addAll(SimpleOption<?>[] options) {
         for (int i = 0; i < options.length; i += 2) {
             this.addOptionEntry(options[i], i < options.length - 1 ? options[i + 1] : null);
         }
     }
 
-    public int addCategory(SoundCategory cat) {
-        return this.addSingleOptionEntry(this.createCustomizedOption(cat));
-    }
+    int addCategory(SoundCategory cat);
 
-    public int addReadOnlyCategory(SoundCategory cat) {
-        return this.addSingleOptionEntry(this.createCustomizedOption(cat), false);
-    }
+    int addReadOnlyCategory(SoundCategory cat);
 
-    public int addDoubleCategory(SoundCategory first, @Nullable SoundCategory second) {
-        return this.addOptionEntry(this.createCustomizedOption(first),
-                (second != null) ? this.createCustomizedOption(second) : null
-        );
-    }
+    int addDoubleCategory(SoundCategory first, @Nullable SoundCategory second);
 
-    public void addAllCategory(SoundCategory[] categories) {
-        this.addAll(Arrays.stream(categories).map(this::createCustomizedOption).toArray(SimpleOption[]::new));
-    }
+    void addAllCategory(SoundCategory[] categories);
 
-    public int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction) {
-        return super.addEntry(SoundEntry.createGroup(this.client.options, this.createCustomizedOption(group), this.width, pressAction));
-    }
+    int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction);
 
-    @Override
-    public int getRowWidth() {
-        return 400;
-    }
+    void setDimensionsImpl(int width, int height);
 
-    private SimpleOption<?> createCustomizedOption(SoundCategory category) {
-        final SimpleOption<Double> simpleOption = this.client.options.getSoundVolumeOption(category);
+    boolean mouseScrolledImpl(double mouseX, double mouseY, double horizontalAmount, double verticalAmount);
+
+    static SimpleOption<?> createCustomizedOption(MinecraftClient client, SoundCategory category) {
+        final SimpleOption<Double> simpleOption = client.options.getSoundVolumeOption(category);
         if (SoundCategories.TOGGLEABLE_CATS.getOrDefault(category, false)) {
             return SimpleOption.ofBoolean(simpleOption.toString(), value -> {
                 return Tooltip.of(SoundCategories.TOOLTIPS.getOrDefault(category, ScreenTexts.EMPTY));
@@ -103,8 +77,8 @@ public abstract class VersionedSoundList extends ElementListWidget<VersionedSoun
     }
 
     @Environment(EnvType.CLIENT)
-    protected static class SoundEntry extends ElementListWidget.Entry<VersionedSoundList.SoundEntry> {
-        List<? extends ClickableWidget> widgets;
+    class SoundEntry extends ElementListWidget.Entry<VersionedElementListWrapper.SoundEntry> {
+        public List<? extends ClickableWidget> widgets;
 
         public SoundEntry(List<? extends ClickableWidget> w) {
             widgets = w;
@@ -127,7 +101,10 @@ public abstract class VersionedSoundList extends ElementListWidget<VersionedSoun
             return new SoundEntry(
                     List.of(
                             group.createWidget(options, width / 2 - 155, 0, 280),
-                            new TexturedButtonWidget(width / 2 + 135, 0, 20, 20, SoundCategories.SETTINGS_ICON, pressAction)
+                            (TexturedButtonWidget) Objects.requireNonNull(
+                                    VersionedTexturedButtonWrapper.newInstance(width / 2 + 135, 0, 20, 20, 0, 0, 20,
+                                            20, 40, pressAction)
+                            )
                     ));
         }
 

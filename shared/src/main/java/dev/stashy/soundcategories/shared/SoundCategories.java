@@ -5,10 +5,8 @@ import com.google.common.collect.Maps;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,13 +41,6 @@ public final class SoundCategories {
     public static final Map<SoundCategory, Float> DEFAULT_LEVELS = new HashMap<>();
     public static final Map<SoundCategory, Boolean> TOGGLEABLE_CATS = Maps.newHashMap();
     public static final Map<SoundCategory, Text> TOOLTIPS = Maps.newHashMap();
-
-    public static final ButtonTextures SETTINGS_ICON = new ButtonTextures(
-            Identifier.of(MOD_ID, "settings/button"),
-            Identifier.of(MOD_ID, "settings/disabled"),
-            Identifier.of(MOD_ID, "settings/hover"),
-            Identifier.of(MOD_ID, "settings/disabled")
-    );
 
     /**
      * Retrieves all {@link EntrypointContainer} from the key <code>"sound-categories"</code> and their annotation fields.

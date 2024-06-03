@@ -1,6 +1,7 @@
-package dev.stashy.soundcategories.mc1_21.gui;
+package dev.stashy.soundcategories.mc1_20.gui;
 
 import dev.stashy.soundcategories.shared.gui.VersionedSoundGroupOptionsScreen;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.sound.SoundCategory;
@@ -12,16 +13,20 @@ public class SoundGroupOptionsScreen extends VersionedSoundGroupOptionsScreen {
 
     @Override
     protected void addParentCategoryWidget() {
-        this.list.addReadOnlyCategory(parentCategory);
+        this.list.addCategory(parentCategory);
     }
 
     @Override
-    protected void addOptions() {
+    protected void init() {
+        super.init();
 
+        super.addDoneButton();
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return this.list.mouseScrolledImpl(mouseX, mouseY, horizontalAmount, verticalAmount);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xffffff);
     }
 }

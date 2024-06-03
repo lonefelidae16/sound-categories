@@ -1,34 +1,23 @@
-package dev.stashy.soundcategories.mc1_20_3.gui;
+package dev.stashy.soundcategories.mc1_20.gui;
 
 import dev.stashy.soundcategories.shared.gui.VersionedElementListWrapper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.EntryListWidget;
+import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-public class SoundList extends EntryListWidget<VersionedElementListWrapper.SoundEntry> implements VersionedElementListWrapper {
-    public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l) {
-        super(minecraftClient, i, j, k, l);
+public class SoundList extends ElementListWidget<VersionedElementListWrapper.SoundEntry> implements VersionedElementListWrapper {
+    public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {
+        super(minecraftClient, i, j, k, l, m);
         this.centerListVertically = false;
     }
 
     public static SoundList init(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
-        return new SoundList(client, width, bottom - top, top, itemHeight);
-    }
-
-    @Override
-    public void setDimensionsImpl(int width, int height) {
-        super.setDimensions(width, height);
-    }
-
-    @Override
-    public boolean mouseScrolledImpl(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return this.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return new SoundList(client, width, height, top, bottom, itemHeight);
     }
 
     @Override
@@ -43,7 +32,7 @@ public class SoundList extends EntryListWidget<VersionedElementListWrapper.Sound
 
     @Override
     public int addSingleOptionEntry(SimpleOption<?> option, boolean editable) {
-        var entry = VersionedElementListWrapper.SoundEntry.create(this.client.options, this.width, option);
+        var entry = SoundEntry.create(this.client.options, this.width, option);
         if (!editable) {
             entry.widgets.forEach(widget -> widget.active = false);
         }
@@ -52,7 +41,7 @@ public class SoundList extends EntryListWidget<VersionedElementListWrapper.Sound
 
     @Override
     public int addOptionEntry(SimpleOption<?> firstOption, @Nullable SimpleOption<?> secondOption) {
-        return this.addEntry(VersionedElementListWrapper.SoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
+        return this.addEntry(SoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
     }
 
     @Override
@@ -79,11 +68,17 @@ public class SoundList extends EntryListWidget<VersionedElementListWrapper.Sound
 
     @Override
     public int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction) {
-        return super.addEntry(VersionedElementListWrapper.SoundEntry.createGroup(this.client.options, VersionedElementListWrapper.createCustomizedOption(this.client, group), this.width, pressAction));
+        return super.addEntry(SoundEntry.createGroup(this.client.options, VersionedElementListWrapper.createCustomizedOption(this.client, group), this.width, pressAction));
     }
 
     @Override
-    protected void appendClickableNarrations(NarrationMessageBuilder builder) {
+    public void setDimensionsImpl(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 
+    @Override
+    public boolean mouseScrolledImpl(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        return this.mouseScrolled(mouseX, mouseY, verticalAmount);
     }
 }

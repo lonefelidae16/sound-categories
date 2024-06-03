@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "soundcategories-shared",
+  "id": "soundcategories-${moduleId}-module",
   "version": "${version}",
-  "name": "Sound Categories shared module",
+  "name": "Sound Categories ${moduleName}",
   "description": "Allows mods to define custom sound categories.",
   "authors": [
     "stashymane",
@@ -15,14 +15,12 @@
   "license": "${mod_license}",
   "environment": "client",
   "mixins": [
-    "soundcategories.shared.mixins.json"
   ],
   "entrypoints": {
   },
   "depends": {
-    "fabricloader": ">=0.15.0",
+    "fabricloader": "*",
     "minecraft": "*",
     "fabric": "*"
-  },
-  "accessWidener": "soundcategories.accesswidener"
+  }
 }

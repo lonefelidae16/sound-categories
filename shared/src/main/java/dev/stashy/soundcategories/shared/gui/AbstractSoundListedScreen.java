@@ -8,7 +8,7 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
 public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
-    protected VersionedSoundList list;
+    protected VersionedElementListWrapper list;
 
     public AbstractSoundListedScreen(Screen parent, GameOptions gameOptions, Text title) {
         super(parent, gameOptions, title);
@@ -48,12 +48,12 @@ public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
     @Override
     protected void initTabNavigation() {
         super.initTabNavigation();
-        this.list.setDimensions(this.width, this.height - 64);
+        this.list.setDimensionsImpl(this.width, this.height - 64);
     }
 
     @Override
     protected void init() {
-        this.list = VersionedSoundList.newInstance(this.client, this.width, this.height - 64, 32, 25);
+        this.list = VersionedElementListWrapper.newInstance(this.client, this.width, this.height, 32, this.height - 32, 25);
         super.init();
     }
 }

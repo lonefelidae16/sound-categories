@@ -1,5 +1,6 @@
 package dev.stashy.soundcategories.shared.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.stashy.soundcategories.shared.SoundCategories;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.option.GameOptions;
@@ -30,19 +31,17 @@ public abstract class GameOptionsMixin {
      * @see GameOptions#createSoundVolumeOption
      * @see GameOptions#GameOptions
      */
-    @ModifyConstant(method = "createSoundVolumeOption", constant = @Constant(doubleValue = 1.0))
+    @ModifyExpressionValue(method = "createSoundVolumeOption", at = @At(value = "CONSTANT", args = "doubleValue=1.0"))
     private double soundcategories$changeDefault(double value) {
-        if (this.currentCategory == null) {
-            return value;
-        }
         return SoundCategories.DEFAULT_LEVELS.getOrDefault(this.currentCategory, (float) value);
     }
 
-    @Redirect(method = "createSoundVolumeOption", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/SimpleOption;emptyTooltip()Lnet/minecraft/client/option/SimpleOption$TooltipFactory;"), require = 0)
-    private SimpleOption.TooltipFactory<?> soundcategories$modifyTooltip(String key, SoundCategory category) {
-        if (SoundCategories.TOOLTIPS.containsKey(category)) {
-            return value -> Tooltip.of(SoundCategories.TOOLTIPS.get(category));
+    @ModifyExpressionValue(method = "createSoundVolumeOption", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/SimpleOption;emptyTooltip()Lnet/minecraft/client/option/SimpleOption$TooltipFactory;"))
+    private SimpleOption.TooltipFactory<?> soundcategories$modifyTooltip(SimpleOption.TooltipFactory<?> original) {
+        if (SoundCategories.TOOLTIPS.containsKey(this.currentCategory)) {
+            final var tooltip = Tooltip.of(SoundCategories.TOOLTIPS.get(this.currentCategory));
+            return value -> tooltip;
         }
-        return SimpleOption.emptyTooltip();
+        return original;
     }
 }

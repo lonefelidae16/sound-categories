@@ -78,6 +78,8 @@ dependencies {
     implementation include(project(path: 'versioned:sc1.21', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:sc1.20.5', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:sc1.20.3', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.20.2', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.20', configuration: 'namedElements'))
 }
 
 tasks.withType(JavaCompile).configureEach {
