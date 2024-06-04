@@ -14,4 +14,10 @@ public class SoundGroupOptionsScreen extends VersionedSoundGroupOptionsScreen {
     protected void addParentCategoryWidget() {
         this.list.addReadOnlyCategory(parentCategory);
     }
+
+    @Override
+    protected void initTabNavigation() {
+        super.initTabNavigation();
+        this.list.setDimensionsImpl(this.width, this.height - 64);
+    }
 }

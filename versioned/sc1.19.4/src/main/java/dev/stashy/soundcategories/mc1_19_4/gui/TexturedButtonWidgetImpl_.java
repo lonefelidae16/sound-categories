@@ -1,0 +1,16 @@
+package dev.stashy.soundcategories.mc1_19_4.gui;
+
+import dev.stashy.soundcategories.shared.SoundCategories;
+import dev.stashy.soundcategories.shared.gui.VersionedTexturedButtonWrapper;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.util.Identifier;
+
+public class TexturedButtonWidgetImpl_ extends TexturedButtonWidget implements VersionedTexturedButtonWrapper {
+    public TexturedButtonWidgetImpl_(int x, int y, int width, int height, int u, int v, int hoveredVOffset, Identifier texture, int textureWidth, int textureHeight, PressAction pressAction) {
+        super(x, y, width, height, u, v, hoveredVOffset, texture, textureWidth, textureHeight, pressAction);
+    }
+
+    public static TexturedButtonWidgetImpl_ init(int x, int y, int width, int height, int u, int v, int hoveredVOffset, int textureWidth, int textureHeight, PressAction pressAction) {
+        return new TexturedButtonWidgetImpl_(x, y, width, height, u, v, hoveredVOffset, Identifier.of(SoundCategories.MOD_ID, "textures/gui/settings.png"), textureWidth, textureHeight, pressAction);
+    }
+}

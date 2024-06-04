@@ -3,7 +3,7 @@
   "id": "soundcategories-${moduleId}-module",
   "version": "${version}",
   "name": "Sound Categories ${moduleName}",
-  "description": "Allows mods to define custom sound categories.",
+  "description": "Multiple version supporter of SoundCategories.",
   "authors": [
     "stashymane",
     "lonefelidae16"

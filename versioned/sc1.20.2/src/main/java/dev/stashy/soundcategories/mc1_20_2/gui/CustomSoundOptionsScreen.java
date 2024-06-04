@@ -18,6 +18,12 @@ public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
     }
 
     @Override
+    protected void initTabNavigation() {
+        super.initTabNavigation();
+        this.list.setDimensionsImpl(this.width, this.height - 64);
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float tickDelta) {
         super.render(context, mouseX, mouseY, tickDelta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xffffff);

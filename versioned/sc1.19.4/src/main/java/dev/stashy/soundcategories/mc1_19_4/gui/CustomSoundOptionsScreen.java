@@ -1,9 +1,9 @@
-package dev.stashy.soundcategories.mc1_20.gui;
+package dev.stashy.soundcategories.mc1_19_4.gui;
 
 import dev.stashy.soundcategories.shared.gui.VersionedSoundOptionsScreen;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
     public CustomSoundOptionsScreen(Screen parent, GameOptions gameOptions) {
@@ -24,9 +24,9 @@ public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float tickDelta) {
-        super.renderBackground(context);
-        super.render(context, mouseX, mouseY, tickDelta);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xffffff);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        super.renderBackground(matrices);
+        super.render(matrices, mouseX, mouseY, delta);
+        drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 20, 0xffffff);
     }
 }

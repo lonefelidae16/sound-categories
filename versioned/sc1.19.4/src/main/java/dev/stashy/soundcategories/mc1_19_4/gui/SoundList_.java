@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.mc1_20.gui;
+package dev.stashy.soundcategories.mc1_19_4.gui;
 
 import dev.stashy.soundcategories.shared.gui.VersionedElementListWrapper;
 import net.minecraft.client.MinecraftClient;
@@ -10,14 +10,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-public class SoundList extends ElementListWidget<VersionedElementListWrapper.SoundEntry> implements VersionedElementListWrapper {
-    public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {
+public class SoundList_ extends ElementListWidget<VersionedElementListWrapper.VersionedSoundEntry> implements VersionedElementListWrapper {
+    public SoundList_(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {
         super(minecraftClient, i, j, k, l, m);
         this.centerListVertically = false;
     }
 
-    public static SoundList init(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
-        return new SoundList(client, width, height, top, bottom, itemHeight);
+    public static SoundList_ init(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
+        return new SoundList_(client, width, height, top, bottom, itemHeight);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class SoundList extends ElementListWidget<VersionedElementListWrapper.Sou
 
     @Override
     public int addSingleOptionEntry(SimpleOption<?> option, boolean editable) {
-        var entry = SoundEntry.create(this.client.options, this.width, option);
+        var entry = VersionedSoundEntry.create(this.client.options, this.width, option);
         if (!editable) {
             entry.widgets.forEach(widget -> widget.active = false);
         }
@@ -41,7 +41,7 @@ public class SoundList extends ElementListWidget<VersionedElementListWrapper.Sou
 
     @Override
     public int addOptionEntry(SimpleOption<?> firstOption, @Nullable SimpleOption<?> secondOption) {
-        return this.addEntry(SoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
+        return this.addEntry(VersionedSoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class SoundList extends ElementListWidget<VersionedElementListWrapper.Sou
 
     @Override
     public int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction) {
-        return super.addEntry(SoundEntry.createGroup(this.client.options, VersionedElementListWrapper.createCustomizedOption(this.client, group), this.width, pressAction));
+        return super.addEntry(VersionedSoundEntry.createGroup(this.client.options, VersionedElementListWrapper.createCustomizedOption(this.client, group), this.width, pressAction));
     }
 
     @Override

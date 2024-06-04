@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-public class SoundList extends EntryListWidget<VersionedElementListWrapper.SoundEntry> implements VersionedElementListWrapper {
+public class SoundList extends EntryListWidget<VersionedElementListWrapper.VersionedSoundEntry> implements VersionedElementListWrapper {
     public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l) {
         super(minecraftClient, i, j, k, l);
         this.centerListVertically = false;
@@ -43,7 +43,7 @@ public class SoundList extends EntryListWidget<VersionedElementListWrapper.Sound
 
     @Override
     public int addSingleOptionEntry(SimpleOption<?> option, boolean editable) {
-        var entry = VersionedElementListWrapper.SoundEntry.create(this.client.options, this.width, option);
+        var entry = VersionedSoundEntry.create(this.client.options, this.width, option);
         if (!editable) {
             entry.widgets.forEach(widget -> widget.active = false);
         }
@@ -52,7 +52,7 @@ public class SoundList extends EntryListWidget<VersionedElementListWrapper.Sound
 
     @Override
     public int addOptionEntry(SimpleOption<?> firstOption, @Nullable SimpleOption<?> secondOption) {
-        return this.addEntry(VersionedElementListWrapper.SoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
+        return this.addEntry(VersionedSoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
     }
 
     @Override
@@ -79,7 +79,7 @@ public class SoundList extends EntryListWidget<VersionedElementListWrapper.Sound
 
     @Override
     public int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction) {
-        return super.addEntry(VersionedElementListWrapper.SoundEntry.createGroup(this.client.options, VersionedElementListWrapper.createCustomizedOption(this.client, group), this.width, pressAction));
+        return super.addEntry(VersionedSoundEntry.createGroup(this.client.options, VersionedElementListWrapper.createCustomizedOption(this.client, group), this.width, pressAction));
     }
 
     @Override

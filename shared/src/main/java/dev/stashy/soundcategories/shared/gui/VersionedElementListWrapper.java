@@ -5,7 +5,6 @@ import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -19,6 +18,7 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,30 +77,45 @@ public interface VersionedElementListWrapper {
     }
 
     @Environment(EnvType.CLIENT)
-    class SoundEntry extends ElementListWidget.Entry<VersionedElementListWrapper.SoundEntry> {
+    abstract class VersionedSoundEntry extends ElementListWidget.Entry<VersionedSoundEntry> {
         public List<? extends ClickableWidget> widgets;
 
-        public SoundEntry(List<? extends ClickableWidget> w) {
+        public VersionedSoundEntry(List<? extends ClickableWidget> w) {
             widgets = w;
         }
 
-        public static SoundEntry create(GameOptions options, int width, SimpleOption<?> simpleOption) {
-            return new SoundEntry(List.of(simpleOption.createWidget(options, width / 2 - 155, 0, 310)));
-        }
-
-        public static SoundEntry createDouble(GameOptions options, int width, SimpleOption<?> first, @Nullable SimpleOption<?> second) {
-            List<ClickableWidget> widgets = new ArrayList<>();
-            widgets.add(first.createWidget(options, width / 2 - 155, 0, 150));
-            if (second != null) {
-                widgets.add(second.createWidget(options, width / 2 + 5, 0, 150));
+        public static VersionedSoundEntry newInstance(List<? extends ClickableWidget> w) {
+            try {
+                Class<VersionedSoundEntry> screen = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "gui.SoundEntry");
+                Constructor<VersionedSoundEntry> constructor = screen.getConstructor(List.class);
+                return constructor.newInstance(w);
+            } catch (Exception ex) {
+                SoundCategories.LOGGER.error("Cannot instantiate 'SoundEntry'", ex);
             }
-            return new SoundEntry(widgets);
+            return null;
         }
 
-        public static SoundEntry createGroup(GameOptions options, SimpleOption<?> group, int width, ButtonWidget.PressAction pressAction) {
-            return new SoundEntry(
+        public static VersionedSoundEntry create(GameOptions options, int width, SimpleOption<?> simpleOption) {
+            return VersionedSoundEntry.newInstance(
+                    List.of(Objects.requireNonNull(
+                            VersionedSimpleOptionProvider.createWidget(simpleOption, options, width / 2 - 155, 0, 310)
+                    ))
+            );
+        }
+
+        public static VersionedSoundEntry createDouble(GameOptions options, int width, SimpleOption<?> first, @Nullable SimpleOption<?> second) {
+            List<ClickableWidget> widgets = new ArrayList<>();
+            widgets.add(VersionedSimpleOptionProvider.createWidget(first, options, width / 2 - 155, 0, 150));
+            if (second != null) {
+                widgets.add(VersionedSimpleOptionProvider.createWidget(second, options, width / 2 + 5, 0, 150));
+            }
+            return VersionedSoundEntry.newInstance(widgets);
+        }
+
+        public static VersionedSoundEntry createGroup(GameOptions options, SimpleOption<?> group, int width, ButtonWidget.PressAction pressAction) {
+            return VersionedSoundEntry.newInstance(
                     List.of(
-                            group.createWidget(options, width / 2 - 155, 0, 280),
+                            Objects.requireNonNull(VersionedSimpleOptionProvider.createWidget(group, options, width / 2 - 155, 0, 280)),
                             (TexturedButtonWidget) Objects.requireNonNull(
                                     VersionedTexturedButtonWrapper.newInstance(width / 2 + 135, 0, 20, 20, 0, 0, 20,
                                             20, 40, pressAction)
@@ -114,18 +129,6 @@ public interface VersionedElementListWrapper {
 
         public List<? extends Selectable> selectableChildren() {
             return this.widgets;
-        }
-
-        @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            int i = 0;
-            int j = context.getScaledWindowWidth() / 2 - 155;
-
-            for (ClickableWidget s : this.widgets) {
-                s.setPosition(j + i, y);
-                s.render(context, mouseX, mouseY, tickDelta);
-                i += s.getWidth() + 10;
-            }
         }
     }
 }

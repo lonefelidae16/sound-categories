@@ -24,6 +24,12 @@ public class SoundGroupOptionsScreen extends VersionedSoundGroupOptionsScreen {
     }
 
     @Override
+    protected void initTabNavigation() {
+        super.initTabNavigation();
+        this.list.setDimensionsImpl(this.width, this.height - 64);
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xffffff);

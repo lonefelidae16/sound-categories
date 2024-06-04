@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.mc1_20_2.gui;
+package dev.stashy.soundcategories.mc1_19_3.gui;
 
 import dev.stashy.soundcategories.shared.gui.VersionedElementListWrapper;
 import net.minecraft.client.MinecraftClient;
@@ -79,6 +79,6 @@ public class SoundList extends ElementListWidget<VersionedElementListWrapper.Ver
 
     @Override
     public boolean mouseScrolledImpl(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return this.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return this.mouseScrolled(mouseX, mouseY, verticalAmount);
     }
 }

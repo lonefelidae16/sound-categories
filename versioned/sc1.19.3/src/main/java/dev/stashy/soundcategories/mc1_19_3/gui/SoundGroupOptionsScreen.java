@@ -1,9 +1,10 @@
-package dev.stashy.soundcategories.mc1_20.gui;
+package dev.stashy.soundcategories.mc1_19_3.gui;
 
 import dev.stashy.soundcategories.shared.gui.VersionedSoundGroupOptionsScreen;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundCategory;
 
 public class SoundGroupOptionsScreen extends VersionedSoundGroupOptionsScreen {
@@ -24,15 +25,9 @@ public class SoundGroupOptionsScreen extends VersionedSoundGroupOptionsScreen {
     }
 
     @Override
-    protected void initTabNavigation() {
-        super.initTabNavigation();
-        this.list.setDimensionsImpl(this.width, this.height - 64);
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.renderBackground(context);
-        super.render(context, mouseX, mouseY, delta);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xffffff);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        super.renderBackground(matrices);
+        super.render(matrices, mouseX, mouseY, delta);
+        drawCenteredTextWithShadow(matrices, this.textRenderer, this.title.asOrderedText(), this.width / 2, 20, 0xffffff);
     }
 }

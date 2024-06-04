@@ -17,7 +17,12 @@ public class SoundGroupOptionsScreen extends VersionedSoundGroupOptionsScreen {
 
     @Override
     protected void addOptions() {
+    }
 
+    @Override
+    protected void initTabNavigation() {
+        super.initTabNavigation();
+        this.list.setDimensionsImpl(this.width, this.height - 64);
     }
 
     @Override

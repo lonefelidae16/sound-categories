@@ -8,4 +8,10 @@ public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
     public CustomSoundOptionsScreen(Screen parent, GameOptions gameOptions) {
         super(parent, gameOptions);
     }
+
+    @Override
+    protected void initTabNavigation() {
+        super.initTabNavigation();
+        this.list.setDimensionsImpl(this.width, this.height - 64);
+    }
 }

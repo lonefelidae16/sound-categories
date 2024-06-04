@@ -1,9 +1,6 @@
 plugins {
     id "fabric-loom"
     id "maven-publish"
-    id "com.matthewprenger.cursegradle"
-    id "com.modrinth.minotaur"
-    id "org.jetbrains.changelog"
     id 'com.palantir.git-version'
 }
 
@@ -48,7 +45,8 @@ allprojects {
             var props = [
                     "mod_page",
                     "mod_sources",
-//                    "mod_issues"
+//                    "mod_issues",
+                    "mod_support_lowest_mc"
             ].collectEntries {
                 [it, project.properties[it]]
             }
@@ -75,11 +73,16 @@ dependencies {
     modImplementation include("me.lonefelidae16:groominglib:${rootProject.groom_version}")
 
     implementation include(project(path: 'shared', configuration: 'namedElements'))
+    // 1.21 family
     implementation include(project(path: 'versioned:sc1.21', configuration: 'namedElements'))
+    // 1.20 family
     implementation include(project(path: 'versioned:sc1.20.5', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:sc1.20.3', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:sc1.20.2', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:sc1.20', configuration: 'namedElements'))
+    // 1.19 family
+    implementation include(project(path: 'versioned:sc1.19.4', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.19.3', configuration: 'namedElements'))
 }
 
 tasks.withType(JavaCompile).configureEach {

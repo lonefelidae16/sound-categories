@@ -3,7 +3,6 @@ package dev.stashy.soundcategories.shared.gui;
 import dev.stashy.soundcategories.shared.SoundCategories;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.util.Identifier;
 
 import java.lang.reflect.Method;
 
