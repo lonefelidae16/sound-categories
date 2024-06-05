@@ -29,33 +29,21 @@ public class SimpleOptionImpl {
             }
             final var option = new SimpleOption<>(SoundCategories.OPTION_PREFIX_SOUND_CAT + cat.getName(), getter, (prefix, value) -> {
                 return value == 0.0 ? GameOptions.getGenericValueText(prefix, ScreenTexts.OFF) : GameOptions.getPercentValueText(prefix, value);
-            }, SimpleOption.DoubleSliderCallbacks.INSTANCE, 1., (value) -> {
-                MinecraftClient.getInstance().getSoundManager().updateSoundVolume(cat, value.floatValue());
+            }, SimpleOption.DoubleSliderCallbacks.INSTANCE, (double) MinecraftClient.getInstance().options.getSoundVolume(cat), (value) -> {
+                var client = MinecraftClient.getInstance();
+                client.getSoundManager().updateSoundVolume(cat, value.floatValue());
+                client.options.setSoundVolume(cat, value.floatValue());
             });
             map.put(cat, option);
         }
     });
 
-    private static final Map<String, SoundCategory> KEY_CAT_MAP = Maps.newHashMap();
-
     public static ClickableWidget createWidget(SimpleOption<?> instance, GameOptions options, int x, int y, int width) {
-        return Optional.ofNullable(KEY_CAT_MAP.getOrDefault(instance.toString(), null))
-                .map(cat -> {
-                    return SoundCategories.TOGGLEABLE_CATS.containsKey(cat) ?
-                            SimpleOption.ofBoolean(
-                                    SoundCategories.OPTION_PREFIX_SOUND_CAT + cat.getName(),
-                                    options.getSoundVolume(cat) > 0, value -> {
-                                        MinecraftClient.getInstance().options.setSoundVolume(cat, value ? 1.f : 0.f);
-                                    }
-                            ).createButton(options, x, y, width) :
-                            new SoundSliderWidget(MinecraftClient.getInstance(), x, y, cat, width);
-                }).orElse(instance.createButton(options, x, y, width));
+        return instance.createButton(options, x, y, width);
     }
 
     public static SimpleOption<?> init(GameOptions options, SoundCategory category) {
-        var ret = Objects.requireNonNull(VOLUME_OPTS.get(category));
-        KEY_CAT_MAP.putIfAbsent(ret.toString(), category);
-        return ret;
+        return Objects.requireNonNull(VOLUME_OPTS.get(category));
     }
 
     public static SimpleOption<Boolean> ofBoolean(String key, Text tooltip, boolean value, Consumer<Boolean> consumer) {
