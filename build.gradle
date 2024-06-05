@@ -1,3 +1,7 @@
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
+
 plugins {
     id "fabric-loom"
     id "maven-publish"
@@ -39,6 +43,8 @@ allprojects {
     project.ext['moduleId'] = 'unnamed'
     project.ext['moduleName'] = ''
     project.ext['mod_license'] = project.mod_license
+    project.ext['moduleMixins'] = []
+    project.ext['moduleAccessWidener'] = ''
 
     tasks.withType(ProcessResources).configureEach {
         doFirst {
@@ -51,15 +57,31 @@ allprojects {
                 [it, project.properties[it]]
             }
 
+            var mixins = new JsonArray()
+            project.ext['moduleMixins'].forEach {
+                mixins.add(it)
+            }
+
             props.putAll([
-                    'moduleId': project.ext['moduleId'],
-                    'moduleName': project.ext['moduleName'],
-                    'mod_license': project.ext['mod_license'],
-                    'version': project.version
+                    'moduleId'    : project.ext['moduleId'],
+                    'moduleName'  : project.ext['moduleName'],
+                    'mod_license' : project.ext['mod_license'],
+                    'moduleMixins': mixins.toString(),
+                    'version'     : project.version
             ])
 
             filesMatching("fabric.mod.json") {
                 expand props
+            }
+        }
+
+        doLast {
+            fileTree(dir: outputs.files.asPath, include: "**/fabric.mod.json").each { file ->
+                var json = JsonParser.parseString(file.text).asJsonObject
+                if (!project.ext['moduleAccessWidener'].isEmpty()) {
+                    json.add("accessWidener", new JsonPrimitive(project.ext['moduleAccessWidener']))
+                    file.text = json.toString()
+                }
             }
         }
     }
@@ -83,6 +105,7 @@ dependencies {
     // 1.19 family
     implementation include(project(path: 'versioned:sc1.19.4', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:sc1.19.3', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.19.2', configuration: 'namedElements'))
 }
 
 tasks.withType(JavaCompile).configureEach {

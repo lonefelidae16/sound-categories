@@ -22,15 +22,20 @@ dependencies {
 }
 
 tasks.withType(ProcessResources).configureEach {
-    project.ext['moduleId'] = 'mc1_19_3'
-    project.ext['moduleName'] = '1.19.3 module'
+    project.ext['moduleId'] = 'mc1_19_2'
+    project.ext['moduleName'] = '1.19.2 module'
     project.ext['mod_license'] = soundCategories.mod_license
-    project.ext['moduleMixins'] = [ 'soundcategories.mixins.mc1_19_3.json' ]
+    project.ext['moduleMixins'] = [ 'soundcategories.mixins.mc1_19_2.json' ]
+    project.ext['moduleAccessWidener'] = 'soundcategories.accesswidener'
 }
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
     it.options.release.set(targetJdk)
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/soundcategories.accesswidener")
 }
 
 java {

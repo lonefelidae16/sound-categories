@@ -23,10 +23,6 @@ dependencies {
     modImplementation "me.lonefelidae16:groominglib:${rootProject.groom_version}"
 }
 
-loom {
-    accessWidenerPath = file("src/main/resources/soundcategories.accesswidener")
-}
-
 java {
     withSourcesJar()
 

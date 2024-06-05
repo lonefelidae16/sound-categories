@@ -25,6 +25,7 @@ public final class SoundCategories {
     );
     public static final String MOD_ID = "soundcategories";
     public static final String BASE_PACKAGE = "dev.stashy.soundcategories";
+    public static final String OPTION_PREFIX_SOUND_CAT = "soundCategory.";
     private static final List<String> SUPPRESSED_NAMES = Lists.newArrayList();
 
     /**

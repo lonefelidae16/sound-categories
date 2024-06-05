@@ -18,7 +18,7 @@ public abstract class VersionedSoundGroupOptionsScreen extends AbstractSoundList
     protected final SoundCategory parentCategory;
 
     public VersionedSoundGroupOptionsScreen(Screen parent, GameOptions gameOptions, SoundCategory category) {
-        super(parent, gameOptions, Text.translatable("soundCategory." + category.getName()));
+        super(parent, gameOptions, Text.translatable(SoundCategories.OPTION_PREFIX_SOUND_CAT + category.getName()));
         this.parentCategory = category;
     }
 

@@ -1,7 +1,6 @@
 package dev.stashy.soundcategories.mc1_19_3.gui;
 
 import dev.stashy.soundcategories.shared.gui.VersionedSoundGroupOptionsScreen;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;

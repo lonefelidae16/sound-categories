@@ -4,8 +4,8 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 
-public class SimpleOptionImpl {
-    public static ClickableWidget init(SimpleOption<?> instance, GameOptions options, int x, int y, int width) {
+public class SimpleOptionImpl_ {
+    public static ClickableWidget createWidget(SimpleOption<?> instance, GameOptions options, int x, int y, int width) {
         return instance.createWidget(options, x, y, width);
     }
 }

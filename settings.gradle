@@ -13,6 +13,6 @@ pluginManagement {
     }
 }
 
-include 'shared', 'versioned:1.21',
-        'versioned:1.20.5', 'versioned:1.20.3', 'versioned:1.20.2', 'versioned:1.20',
-        'versioned:1.19.4', 'versioned:1.19.3'
+include 'shared', 'versioned:sc1.21',
+        'versioned:sc1.20.5', 'versioned:sc1.20.3', 'versioned:sc1.20.2', 'versioned:sc1.20',
+        'versioned:sc1.19.4', 'versioned:sc1.19.3', 'versioned:sc1.19.2'

@@ -7,7 +7,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
@@ -27,7 +26,7 @@ import java.util.Objects;
 public interface VersionedElementListWrapper {
     static VersionedElementListWrapper newInstance(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
         try {
-            Class<VersionedElementListWrapper> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE,"gui.SoundList");
+            Class<VersionedElementListWrapper> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "gui.SoundList");
             Method init = clazz.getMethod("init", MinecraftClient.class, int.class, int.class, int.class, int.class, int.class);
             return (VersionedElementListWrapper) init.invoke(null, client, width, height, top, bottom, itemHeight);
         } catch (Exception ex) {
@@ -65,13 +64,16 @@ public interface VersionedElementListWrapper {
     boolean mouseScrolledImpl(double mouseX, double mouseY, double horizontalAmount, double verticalAmount);
 
     static SimpleOption<?> createCustomizedOption(MinecraftClient client, SoundCategory category) {
-        final SimpleOption<Double> simpleOption = client.options.getSoundVolumeOption(category);
+        final SimpleOption<Double> simpleOption = Objects.requireNonNull(VersionedSimpleOptionProvider.newInstance(client.options, category));
         if (SoundCategories.TOGGLEABLE_CATS.getOrDefault(category, false)) {
-            return SimpleOption.ofBoolean(simpleOption.toString(), value -> {
-                return Tooltip.of(SoundCategories.TOOLTIPS.getOrDefault(category, ScreenTexts.EMPTY));
-            }, simpleOption.getValue() > 0, value -> {
-                simpleOption.setValue(value ? 1.0 : 0.0);
-            });
+            return VersionedSimpleOptionProvider.ofBoolean(
+                    simpleOption.toString(),
+                    SoundCategories.TOOLTIPS.getOrDefault(category, ScreenTexts.EMPTY),
+                    simpleOption.getValue() > 0,
+                    value -> {
+                        simpleOption.setValue(value ? 1.0 : 0.0);
+                    }
+            );
         }
         return simpleOption;
     }

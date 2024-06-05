@@ -14,8 +14,7 @@
   },
   "license": "${mod_license}",
   "environment": "client",
-  "mixins": [
-  ],
+  "mixins": ${moduleMixins},
   "entrypoints": {
   },
   "depends": {

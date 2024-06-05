@@ -5,8 +5,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
-    public CustomSoundOptionsScreen(Screen parent, GameOptions gameOptions) {
+public class CustomSoundOptionsScreen_ extends VersionedSoundOptionsScreen {
+    public CustomSoundOptionsScreen_(Screen parent, GameOptions gameOptions) {
         super(parent, gameOptions);
     }
 

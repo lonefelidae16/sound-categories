@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.mc1_19_4.gui;
+package dev.stashy.soundcategories.mc1_19_2.gui;
 
 import dev.stashy.soundcategories.shared.gui.VersionedElementListWrapper;
 import net.minecraft.client.MinecraftClient;
@@ -10,14 +10,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-public class SoundList_ extends ElementListWidget<VersionedElementListWrapper.VersionedSoundEntry> implements VersionedElementListWrapper {
-    public SoundList_(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {
+public class SoundList extends ElementListWidget<VersionedElementListWrapper.VersionedSoundEntry> implements VersionedElementListWrapper {
+    public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {
         super(minecraftClient, i, j, k, l, m);
         this.centerListVertically = false;
     }
 
-    public static SoundList_ init(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
-        return new SoundList_(client, width, height, top, bottom, itemHeight);
+    public static SoundList init(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
+        return new SoundList(client, width, height, top, bottom, itemHeight);
     }
 
     @Override

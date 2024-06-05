@@ -6,8 +6,8 @@ import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundCategory;
 
-public class SoundGroupOptionsScreen extends VersionedSoundGroupOptionsScreen {
-    public SoundGroupOptionsScreen(Screen parent, GameOptions gameOptions, SoundCategory category) {
+public class SoundGroupOptionsScreen_ extends VersionedSoundGroupOptionsScreen {
+    public SoundGroupOptionsScreen_(Screen parent, GameOptions gameOptions, SoundCategory category) {
         super(parent, gameOptions, category);
     }
 

@@ -1,8 +1,10 @@
 package dev.stashy.soundcategories.shared.gui;
 
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
@@ -21,26 +23,29 @@ public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
     protected void addDoneButton(boolean withCancel) {
         if (withCancel) {
             this.addDrawableChild(
-                    ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
+                    (Element & Drawable & Selectable) VersionedButtonWrapper.newInstance(
+                            this.width / 2 - 155, this.height - 27, 150, 20,
+                            ScreenTexts.DONE, (button) -> {
                                 this.client.options.write();
                                 this.client.setScreen(this.parent);
-                            })
-                            .dimensions(this.width / 2 - 155, this.height - 27, 150, 20)
-                            .build()
+                            }
+                    )
             );
             this.addDrawableChild(
-                    ButtonWidget.builder(ScreenTexts.CANCEL, (button) -> this.client.setScreen(this.parent))
-                            .dimensions(this.width / 2 - 155 + 160, this.height - 27, 150, 20)
-                            .build()
+                    (Element & Drawable & Selectable) VersionedButtonWrapper.newInstance(
+                            this.width / 2 - 155 + 160, this.height - 27, 150, 20,
+                            ScreenTexts.CANCEL, (button) -> this.client.setScreen(this.parent)
+                    )
             );
         } else {
             this.addDrawableChild(
-                    ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
+                    (Element & Drawable & Selectable) VersionedButtonWrapper.newInstance(
+                            this.width / 2 - 100, this.height - 27, 200, 20,
+                            ScreenTexts.DONE, (button) -> {
                                 this.client.options.write();
                                 this.client.setScreen(this.parent);
-                            })
-                            .dimensions(this.width / 2 - 100, this.height - 27, 200, 20)
-                            .build()
+                            }
+                    )
             );
         }
     }
