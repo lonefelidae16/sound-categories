@@ -1,11 +1,9 @@
-package dev.stashy.soundcategories.mc1_19_2.gui;
+package dev.stashy.soundcategories.mc1_19.gui;
 
-import com.google.common.collect.Maps;
 import dev.stashy.soundcategories.shared.SoundCategories;
 import me.lonefelidae16.groominglib.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.gui.widget.SoundSliderWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.screen.ScreenTexts;
@@ -13,9 +11,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 
 import java.util.EnumMap;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class SimpleOptionImpl {

@@ -105,7 +105,7 @@ dependencies {
     // 1.19 family
     implementation include(project(path: 'versioned:sc1.19.4', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:sc1.19.3', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:sc1.19.2', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.19', configuration: 'namedElements'))
 }
 
 tasks.withType(JavaCompile).configureEach {
