@@ -2,6 +2,7 @@ package dev.stashy.soundcategories.shared;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import dev.stashy.soundcategories.shared.gui.screen.VersionedText;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
@@ -11,7 +12,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.AnnotationFormatError;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +28,9 @@ public final class SoundCategories {
     );
     public static final String MOD_ID = "soundcategories";
     public static final String BASE_PACKAGE = "dev.stashy.soundcategories";
-    public static final String OPTION_PREFIX_SOUND_CAT = "soundCategory.";
+    public static final Map<String, Method> CACHED_METHOD_MAP = new HashMap<>();
+    public static final Map<String, Constructor<?>> CACHED_INIT_MAP = new HashMap<>();
+    private static final String OPTION_PREFIX_SOUND_CAT = "soundCategory.";
     private static final List<String> SUPPRESSED_NAMES = Lists.newArrayList();
 
     /**
@@ -42,6 +47,10 @@ public final class SoundCategories {
     public static final Map<SoundCategory, Float> DEFAULT_LEVELS = new HashMap<>();
     public static final Map<SoundCategory, Boolean> TOGGLEABLE_CATS = Maps.newHashMap();
     public static final Map<SoundCategory, Text> TOOLTIPS = Maps.newHashMap();
+
+    public static String getOptionsTranslationKey(SoundCategory target) {
+        return OPTION_PREFIX_SOUND_CAT + target.getName();
+    }
 
     /**
      * Retrieves all {@link EntrypointContainer} from the key <code>"sound-categories"</code> and their annotation fields.
@@ -146,7 +155,7 @@ public final class SoundCategories {
                     }
 
                     if (!annotation.tooltip().isEmpty()) {
-                        TOOLTIPS.put(category, Text.translatable(annotation.tooltip()));
+                        TOOLTIPS.put(category, VersionedText.INSTANCE.translatable(annotation.tooltip()));
                     }
                 }
             }

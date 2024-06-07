@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.mc1_19.mixin;
+package dev.stashy.soundcategories.mc1_18_2.mixin;
 
 import dev.stashy.soundcategories.shared.gui.screen.VersionedSoundOptionsScreen;
 import net.minecraft.client.gui.screen.Screen;

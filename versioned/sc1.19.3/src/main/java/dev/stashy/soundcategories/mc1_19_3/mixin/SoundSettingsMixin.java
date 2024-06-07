@@ -1,7 +1,7 @@
 package dev.stashy.soundcategories.mc1_19_3.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import dev.stashy.soundcategories.shared.gui.VersionedSoundOptionsScreen;
+import dev.stashy.soundcategories.shared.gui.screen.VersionedSoundOptionsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.option.GameOptions;
