@@ -1,11 +1,11 @@
-package dev.stashy.soundcategories.mc1_18_2;
+package dev.stashy.soundcategories.mc1_18;
 
 import me.lonefelidae16.groominglib.api.AbstractVersionedMixinPlugin;
 
 public final class VersionedMixinPlugin extends AbstractVersionedMixinPlugin {
     @Override
     protected String startVersion() {
-        return "1.18.2";
+        return "1.18";
     }
 
     @Override

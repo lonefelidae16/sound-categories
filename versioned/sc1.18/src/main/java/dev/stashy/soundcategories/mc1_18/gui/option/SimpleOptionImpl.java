@@ -1,6 +1,7 @@
-package dev.stashy.soundcategories.mc1_18_2.gui.option;
+package dev.stashy.soundcategories.mc1_18.gui.option;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
+import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.option.CyclingOption;
 import net.minecraft.client.option.DoubleOption;
@@ -8,12 +9,8 @@ import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.Option;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class SimpleOptionImpl {
     public static ClickableWidget createWidget(Object instance, GameOptions options, int x, int y, int width) {
@@ -27,7 +24,7 @@ public class SimpleOptionImpl {
                 (gameOptions, doubleOption) -> {
                     double value = doubleOption.get(gameOptions);
                     if (value == 0.) {
-                        return doubleOption.getGenericLabel(new TranslatableText("options.extrasounds.slider.min"));
+                        return doubleOption.getGenericLabel(ScreenTexts.OFF);
                     } else {
                         return doubleOption.getPercentLabel(value);
                     }

@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.mc1_18_2.gui.screen;
+package dev.stashy.soundcategories.mc1_18.gui.screen;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
 import dev.stashy.soundcategories.shared.gui.screen.VersionedSoundGroupOptionsScreen;

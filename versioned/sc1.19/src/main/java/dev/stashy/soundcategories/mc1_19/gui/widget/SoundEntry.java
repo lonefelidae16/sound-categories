@@ -1,7 +1,6 @@
 package dev.stashy.soundcategories.mc1_19.gui.widget;
 
 import dev.stashy.soundcategories.shared.gui.widget.VersionedElementListWrapper;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 
