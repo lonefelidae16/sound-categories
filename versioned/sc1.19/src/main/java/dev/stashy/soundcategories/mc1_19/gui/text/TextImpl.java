@@ -1,23 +1,24 @@
-package dev.stashy.soundcategories.mc1_18.gui.screen;
+package dev.stashy.soundcategories.mc1_19.gui.text;
 
 import dev.stashy.soundcategories.shared.gui.screen.VersionedText;
-import net.minecraft.client.gui.screen.ScreenTexts;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 public class TextImpl extends VersionedText {
     @Override
+    public Text empty() {
+        return Text.empty();
+    }
+
     public Text getDoneText() {
         return ScreenTexts.DONE;
     }
 
-    @Override
     public Text getCancelText() {
         return ScreenTexts.CANCEL;
     }
 
-    @Override
     public Text translatable(String key) {
-        return new TranslatableText(key);
+        return Text.translatable(key);
     }
 }

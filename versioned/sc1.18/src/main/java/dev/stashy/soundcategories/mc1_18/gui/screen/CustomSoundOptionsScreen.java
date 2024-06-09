@@ -1,15 +1,11 @@
 package dev.stashy.soundcategories.mc1_18.gui.screen;
 
-import dev.stashy.soundcategories.shared.SoundCategories;
-import dev.stashy.soundcategories.shared.gui.screen.VersionedSoundGroupOptionsScreen;
 import dev.stashy.soundcategories.shared.gui.screen.VersionedSoundOptionsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.Option;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundCategory;
-
-import java.util.Arrays;
 
 public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
     public CustomSoundOptionsScreen(Screen parent, GameOptions gameOptions) {
@@ -19,19 +15,13 @@ public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
     @Override
     protected void initList() {
         this.list.addCategory(SoundCategory.MASTER);
-        SoundCategory[] cats = Arrays.stream(SoundCategory.values()).filter(it -> {
-            return !SoundCategories.PARENTS.containsKey(it) &&
-                    !SoundCategories.PARENTS.containsValue(it) &&
-                    it != SoundCategory.MASTER;
-        }).toArray(SoundCategory[]::new);
-        this.list.addAllCategory(cats);
+        this.list.addAllCategory(this.filterVanillaCategory());
 
         this.list.addDrawable(Option.AUDIO_DEVICE.createButton(this.gameOptions, this.width / 2 - 155, 0, 310));
         this.list.addDrawable(Option.SUBTITLES.createButton(this.gameOptions, this.width / 2 - 75, 0, 150));
 
-        for (String key : SoundCategories.MASTER_CLASSES) {
-            final SoundCategory category = SoundCategories.MASTERS.get(key);
-            this.list.addGroup(category, button -> this.client.setScreen(VersionedSoundGroupOptionsScreen.newInstance(this, this.gameOptions, category)));
+        for (SoundCategory category : this.filterCustomizedMasterCategory()) {
+            this.list.addGroup(category, button -> this.client.setScreen(new SoundGroupOptionsScreen(this, this.gameOptions, category)));
         }
     }
 

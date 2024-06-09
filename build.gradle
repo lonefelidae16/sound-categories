@@ -29,16 +29,6 @@ base {
     archivesName = project.archives_base_name
 }
 
-var compatibleWith = []
-
-var split = rootProject.minecraft_version.split('\\.')
-if (split.length == 3 && !rootProject.minecraft_version.contains("-")) {
-    var base = split[0] + "." + split[1]
-    compatibleWith.add(base)
-    for (int i = Integer.parseInt(split[2]); i > 0; i--)
-        compatibleWith.add(base + "." + i)
-} else compatibleWith.add(rootProject.minecraft_version)
-
 allprojects {
     project.ext['moduleId'] = 'unnamed'
     project.ext['moduleName'] = ''
@@ -77,10 +67,10 @@ allprojects {
 
         doLast {
             fileTree(dir: outputs.files.asPath, include: "**/fabric.mod.json").each { file ->
-                var json = JsonParser.parseString(file.text).asJsonObject
+                var fabricModJson = JsonParser.parseString(file.text).asJsonObject
                 if (!project.ext['moduleAccessWidener'].isEmpty()) {
-                    json.add("accessWidener", new JsonPrimitive(project.ext['moduleAccessWidener']))
-                    file.text = json.toString()
+                    fabricModJson.add("accessWidener", new JsonPrimitive(project.ext['moduleAccessWidener']))
+                    file.text = fabricModJson.toString()
                 }
             }
         }

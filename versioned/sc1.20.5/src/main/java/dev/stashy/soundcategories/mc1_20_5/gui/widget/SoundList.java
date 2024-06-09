@@ -1,9 +1,9 @@
 package dev.stashy.soundcategories.mc1_20_5.gui.widget;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
-import dev.stashy.soundcategories.shared.gui.option.VersionedSimpleOptionProvider;
 import dev.stashy.soundcategories.shared.gui.widget.VersionedElementListWrapper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class SoundList extends ElementListWidget<VersionedElementListWrapper.VersionedSoundEntry> implements VersionedElementListWrapper {
     public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l) {
@@ -41,21 +40,15 @@ public class SoundList extends ElementListWidget<VersionedElementListWrapper.Ver
         return this.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
-    @Override
-    public Object createCustomizedOption(MinecraftClient client, SoundCategory category) {
-        final Object option = Objects.requireNonNull(VersionedSimpleOptionProvider.newInstance(client.options, category));
+    private SimpleOption<?> createCustomizedOption(SoundCategory category) {
+        final SimpleOption<Double> option = this.client.options.getSoundVolumeOption(category);
         if (SoundCategories.TOGGLEABLE_CATS.getOrDefault(category, false)) {
-            if (option instanceof SimpleOption) {
-                SimpleOption<Double> simpleOption = (SimpleOption<Double>) option;
-                return VersionedSimpleOptionProvider.ofBoolean(
-                        option.toString(),
-                        SoundCategories.TOOLTIPS.getOrDefault(category, Text.of("")),
-                        simpleOption.getValue() > 0,
-                        value -> {
-                            simpleOption.setValue(value ? 1.0 : 0.0);
-                        }
-                );
-            }
+            final Text tooltip = SoundCategories.TOOLTIPS.getOrDefault(category, Text.empty());
+            return SimpleOption.ofBoolean(option.toString(),
+                    b -> (tooltip.equals(Text.empty())) ? null : Tooltip.of(tooltip),
+                    option.getValue() > 0,
+                    value -> option.setValue(value ? 1.0 : 0.0)
+            );
         }
         return option;
     }
@@ -81,28 +74,21 @@ public class SoundList extends ElementListWidget<VersionedElementListWrapper.Ver
 
     @Override
     public int addCategory(SoundCategory cat) {
-        return this.addSingleOptionEntry(createCustomizedOption(this.client, cat));
+        return this.addSingleOptionEntry(this.createCustomizedOption(cat));
     }
 
     @Override
     public int addReadOnlyCategory(SoundCategory cat) {
-        return this.addSingleOptionEntry(createCustomizedOption(this.client, cat), false);
-    }
-
-    @Override
-    public int addDoubleCategory(SoundCategory first, @Nullable SoundCategory second) {
-        return this.addOptionEntry(createCustomizedOption(this.client, first),
-                (second != null) ? createCustomizedOption(this.client, second) : null
-        );
+        return this.addSingleOptionEntry(this.createCustomizedOption(cat), false);
     }
 
     @Override
     public void addAllCategory(SoundCategory[] categories) {
-        this.addAll(Arrays.stream(categories).map(cat -> createCustomizedOption(this.client, cat)).toArray());
+        this.addAll(Arrays.stream(categories).map(this::createCustomizedOption).toArray());
     }
 
     @Override
     public int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction) {
-        return super.addEntry(VersionedSoundEntry.createGroup(this.client.options, createCustomizedOption(this.client, group), this.width, pressAction));
+        return super.addEntry(VersionedSoundEntry.createGroup(this.client.options, this.createCustomizedOption(group), this.width, pressAction));
     }
 }

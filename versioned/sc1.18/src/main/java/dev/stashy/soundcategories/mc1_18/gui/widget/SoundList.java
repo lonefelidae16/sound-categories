@@ -1,12 +1,14 @@
 package dev.stashy.soundcategories.mc1_18.gui.widget;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
-import dev.stashy.soundcategories.shared.gui.option.VersionedSimpleOptionProvider;
 import dev.stashy.soundcategories.shared.gui.widget.VersionedElementListWrapper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.option.CyclingOption;
+import net.minecraft.client.option.DoubleOption;
 import net.minecraft.client.option.Option;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
@@ -14,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class SoundList extends ElementListWidget<VersionedElementListWrapper.VersionedSoundEntry> implements VersionedElementListWrapper {
     public SoundList(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {
@@ -47,34 +48,28 @@ public class SoundList extends ElementListWidget<VersionedElementListWrapper.Ver
 
     @Override
     public int addOptionEntry(Object firstOption, @Nullable Object secondOption) {
+        // TODO: Here is already "Versioned" package; Is it necessary using reflection?
         return this.addEntry(VersionedSoundEntry.createDouble(this.client.options, this.width, firstOption, secondOption));
     }
 
     @Override
     public int addCategory(SoundCategory cat) {
-        return this.addSingleOptionEntry(createCustomizedOption(this.client, cat));
+        return this.addSingleOptionEntry(this.createCustomizedOption(cat));
     }
 
     @Override
     public int addReadOnlyCategory(SoundCategory cat) {
-        return this.addSingleOptionEntry(createCustomizedOption(this.client, cat), false);
-    }
-
-    @Override
-    public int addDoubleCategory(SoundCategory first, @Nullable SoundCategory second) {
-        return this.addOptionEntry(createCustomizedOption(this.client, first),
-                (second != null) ? createCustomizedOption(this.client, second) : null
-        );
+        return this.addSingleOptionEntry(this.createCustomizedOption(cat), false);
     }
 
     @Override
     public void addAllCategory(SoundCategory[] categories) {
-        this.addAll(Arrays.stream(categories).map(cat -> createCustomizedOption(this.client, cat)).toArray());
+        this.addAll(Arrays.stream(categories).map(this::createCustomizedOption).toArray());
     }
 
     @Override
     public int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction) {
-        return super.addEntry(VersionedSoundEntry.createGroup(this.client.options, createCustomizedOption(this.client, group), this.width, pressAction));
+        return super.addEntry(VersionedSoundEntry.createGroup(this.client.options, this.createCustomizedOption(group), this.width, pressAction));
     }
 
     @Override
@@ -88,26 +83,31 @@ public class SoundList extends ElementListWidget<VersionedElementListWrapper.Ver
         return this.mouseScrolled(mouseX, mouseY, verticalAmount);
     }
 
-    @Override
-    public Object createCustomizedOption(MinecraftClient client, SoundCategory category) {
-        final Object option = Objects.requireNonNull(VersionedSimpleOptionProvider.newInstance(client.options, category));
+    private Option createCustomizedOption(SoundCategory category) {
+        final DoubleOption option = new DoubleOption(SoundCategories.getOptionsTranslationKey(category), 0, 1, 0,
+                gameOptions -> (double) gameOptions.getSoundVolume(category),
+                (gameOptions, value) -> gameOptions.setSoundVolume(category, value.floatValue()),
+                (gameOptions, doubleOption) -> {
+                    double value = doubleOption.get(gameOptions);
+                    if (value == 0.) {
+                        return doubleOption.getGenericLabel(ScreenTexts.OFF);
+                    } else {
+                        return doubleOption.getPercentLabel(value);
+                    }
+                });
         if (SoundCategories.TOGGLEABLE_CATS.getOrDefault(category, false)) {
-            if (option instanceof Option o) {
-                return VersionedSimpleOptionProvider.ofBoolean(
-                        category.name(),
-                        SoundCategories.TOOLTIPS.getOrDefault(category, Text.of("")),
-                        MinecraftClient.getInstance().options.getSoundVolume(category) > 0,
-                        value -> {
-                            MinecraftClient.getInstance().options.setSoundVolume(category, value ? 1.0f : 0.0f);
-                        }
-                );
-            }
+            return CyclingOption.create(SoundCategories.getOptionsTranslationKey(category),
+                    SoundCategories.TOOLTIPS.getOrDefault(category, Text.of("")), gameOptions -> {
+                        return gameOptions.getSoundVolume(category) > 0;
+                    },
+                    (gameOptions, o, v) -> MinecraftClient.getInstance().options.setSoundVolume(category, v ? 1.0f : 0.0f)
+            );
         }
         return option;
     }
 
     @Override
     public void addDrawable(ClickableWidget button) {
-        this.addEntry(VersionedSoundEntry.newInstance(List.of(button)));
+        this.addEntry(new SoundEntry(List.of(button)));
     }
 }

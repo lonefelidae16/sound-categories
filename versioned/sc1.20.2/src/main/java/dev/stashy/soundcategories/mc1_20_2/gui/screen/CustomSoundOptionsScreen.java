@@ -1,7 +1,6 @@
 package dev.stashy.soundcategories.mc1_20_2.gui.screen;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
-import dev.stashy.soundcategories.shared.gui.screen.VersionedSoundGroupOptionsScreen;
 import dev.stashy.soundcategories.shared.gui.screen.VersionedSoundOptionsScreen;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -30,7 +29,7 @@ public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
 
         for (String key : SoundCategories.MASTER_CLASSES) {
             final SoundCategory category = SoundCategories.MASTERS.get(key);
-            this.list.addGroup(category, button -> this.client.setScreen(VersionedSoundGroupOptionsScreen.newInstance(this, this.gameOptions, category)));
+            this.list.addGroup(category, button -> this.client.setScreen(new SoundGroupOptionsScreen(this, this.gameOptions, category)));
         }
     }
 

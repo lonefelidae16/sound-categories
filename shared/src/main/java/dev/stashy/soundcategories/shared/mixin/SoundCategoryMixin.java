@@ -2,7 +2,7 @@ package dev.stashy.soundcategories.shared.mixin;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import dev.stashy.soundcategories.shared.CategoryLoader;
+import dev.stashy.soundcategories.CategoryLoader;
 import dev.stashy.soundcategories.shared.SoundCategories;
 import net.minecraft.sound.SoundCategory;
 import org.objectweb.asm.Opcodes;

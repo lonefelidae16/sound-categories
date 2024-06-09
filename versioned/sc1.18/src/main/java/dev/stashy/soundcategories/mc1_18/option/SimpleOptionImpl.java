@@ -1,16 +1,12 @@
-package dev.stashy.soundcategories.mc1_18.gui.option;
+package dev.stashy.soundcategories.mc1_18.option;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.option.CyclingOption;
 import net.minecraft.client.option.DoubleOption;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.Option;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
-
-import java.util.function.Consumer;
 
 public class SimpleOptionImpl {
     public static ClickableWidget createWidget(Object instance, GameOptions options, int x, int y, int width) {
@@ -29,12 +25,5 @@ public class SimpleOptionImpl {
                         return doubleOption.getPercentLabel(value);
                     }
                 });
-    }
-
-    public static CyclingOption<Boolean> ofBoolean(String key, Text tooltip, boolean value, Consumer<Boolean> consumer) {
-        final SoundCategory category = SoundCategory.valueOf(key);
-        return CyclingOption.create(SoundCategories.getOptionsTranslationKey(category), tooltip, gameOptions -> {
-            return gameOptions.getSoundVolume(category) > 0;
-        }, (gameOptions, option, v) -> consumer.accept(v));
     }
 }

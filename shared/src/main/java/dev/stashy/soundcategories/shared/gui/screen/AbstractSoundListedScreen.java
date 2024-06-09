@@ -1,5 +1,6 @@
 package dev.stashy.soundcategories.shared.gui.screen;
 
+import dev.stashy.soundcategories.shared.SoundCategories;
 import dev.stashy.soundcategories.shared.gui.widget.VersionedButtonWrapper;
 import dev.stashy.soundcategories.shared.gui.widget.VersionedElementListWrapper;
 import net.minecraft.client.gui.Drawable;
@@ -8,7 +9,10 @@ import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
+
+import java.util.Arrays;
 
 public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
     protected VersionedElementListWrapper list;
@@ -55,5 +59,13 @@ public abstract class AbstractSoundListedScreen extends GameOptionsScreen {
     protected void init() {
         this.list = VersionedElementListWrapper.newInstance(this.client, this.width, this.height, 32, this.height - 32, 25);
         super.init();
+
+        this.addDrawableChild(this.list);
+    }
+
+    protected SoundCategory[] filterByParentCategory(SoundCategory parentCategory) {
+        return Arrays.stream(SoundCategory.values()).filter(it -> {
+            return SoundCategories.PARENTS.containsKey(it) && SoundCategories.PARENTS.get(it) == parentCategory;
+        }).toArray(SoundCategory[]::new);
     }
 }

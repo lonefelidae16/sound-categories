@@ -4,24 +4,23 @@ import dev.stashy.soundcategories.shared.SoundCategories;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.sound.SoundCategory;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public abstract class VersionedSoundOptionsScreen extends AbstractSoundListedScreen {
-    private static final String METHOD_SIGN_INIT = VersionedSoundOptionsScreen.class.getCanonicalName() + "#<init>";
+    private static final String METHOD_KEY_INIT = VersionedSoundOptionsScreen.class.getCanonicalName() + "#<init>";
 
     static {
         try {
             Class<VersionedSoundOptionsScreen> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "gui.screen.CustomSoundOptionsScreen");
             Constructor<VersionedSoundOptionsScreen> constructor = clazz.getConstructor(Screen.class, GameOptions.class);
-            SoundCategories.CACHED_INIT_MAP.put(METHOD_SIGN_INIT, Objects.requireNonNull(constructor));
+            SoundCategories.CACHED_INIT_MAP.put(METHOD_KEY_INIT, Objects.requireNonNull(constructor));
         } catch (Exception ex) {
             SoundCategories.LOGGER.error("Failed to find 'CustomSoundOptionsScreen' class.", ex);
         }
@@ -33,7 +32,7 @@ public abstract class VersionedSoundOptionsScreen extends AbstractSoundListedScr
 
     public static VersionedSoundOptionsScreen newInstance(Screen parent, GameOptions settings) {
         try {
-            Constructor<VersionedSoundOptionsScreen> constructor = (Constructor<VersionedSoundOptionsScreen>) SoundCategories.CACHED_INIT_MAP.get(METHOD_SIGN_INIT);
+            Constructor<VersionedSoundOptionsScreen> constructor = (Constructor<VersionedSoundOptionsScreen>) SoundCategories.CACHED_INIT_MAP.get(METHOD_KEY_INIT);
             return constructor.newInstance(parent, settings);
         } catch (Exception ex) {
             SoundCategories.LOGGER.error("Cannot instantiate 'CustomSoundOptionsScreen'", ex);
@@ -56,6 +55,18 @@ public abstract class VersionedSoundOptionsScreen extends AbstractSoundListedScr
 
         this.initList();
 
-        this.addDrawableChild((Element & Drawable & Selectable) this.list);
+        this.addDrawableChild(this.list);
+    }
+
+    protected SoundCategory[] filterVanillaCategory() {
+        return Arrays.stream(SoundCategory.values()).filter(it -> {
+            return !SoundCategories.PARENTS.containsKey(it) &&
+                    !SoundCategories.PARENTS.containsValue(it) &&
+                    it != SoundCategory.MASTER;
+        }).toArray(SoundCategory[]::new);
+    }
+
+    protected SoundCategory[] filterCustomizedMasterCategory() {
+        return Arrays.stream(SoundCategories.MASTER_CLASSES).map(SoundCategories.MASTERS::get).toArray(SoundCategory[]::new);
     }
 }

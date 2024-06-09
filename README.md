@@ -33,7 +33,7 @@ created.
 Example class:
 
 ```java
-import dev.stashy.soundcategories.shared.CategoryLoader;
+import dev.stashy.soundcategories.CategoryLoader;
 import net.minecraft.sound.SoundCategory;
 
 public class CustomCategories implements CategoryLoader

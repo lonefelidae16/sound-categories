@@ -1,18 +1,26 @@
 package dev.stashy.soundcategories.mc1_20_5.gui.screen;
 
-import dev.stashy.soundcategories.shared.gui.screen.VersionedSoundGroupOptionsScreen;
+import dev.stashy.soundcategories.shared.SoundCategories;
+import dev.stashy.soundcategories.shared.gui.screen.AbstractSoundListedScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 
-public class SoundGroupOptionsScreen extends VersionedSoundGroupOptionsScreen {
+public class SoundGroupOptionsScreen extends AbstractSoundListedScreen {
+    private final SoundCategory parentCategory;
+
     public SoundGroupOptionsScreen(Screen parent, GameOptions gameOptions, SoundCategory category) {
-        super(parent, gameOptions, category);
+        super(parent, gameOptions, Text.translatable(SoundCategories.getOptionsTranslationKey(category)));
+        this.parentCategory = category;
     }
 
     @Override
-    protected void addParentCategoryWidget() {
-        this.list.addReadOnlyCategory(parentCategory);
+    protected void init() {
+        super.init();
+
+        this.list.addReadOnlyCategory(this.parentCategory);
+        this.list.addAllCategory(this.filterByParentCategory(this.parentCategory));
     }
 
     @Override

@@ -13,7 +13,7 @@ public abstract class VersionedText {
     static {
         VersionedText instance = null;
         try {
-            Class<VersionedText> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "gui.screen.TextImpl");
+            Class<VersionedText> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "gui.text.TextImpl");
             Constructor<VersionedText> constructor = clazz.getConstructor();
             instance = constructor.newInstance();
         } catch (Exception ex) {
@@ -21,6 +21,8 @@ public abstract class VersionedText {
         }
         INSTANCE = Objects.requireNonNull(instance);
     }
+
+    public abstract Text empty();
 
     public abstract Text getDoneText();
 

@@ -2,6 +2,7 @@ package dev.stashy.soundcategories.shared;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import dev.stashy.soundcategories.CategoryLoader;
 import dev.stashy.soundcategories.shared.gui.screen.VersionedText;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.fabricmc.loader.api.FabricLoader;

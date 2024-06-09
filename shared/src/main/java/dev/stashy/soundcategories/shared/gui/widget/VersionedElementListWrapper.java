@@ -6,6 +6,7 @@ import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -22,17 +23,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public interface VersionedElementListWrapper {
-    String METHOD_SIGN_INIT = VersionedElementListWrapper.class.getCanonicalName() + "#init";
+public interface VersionedElementListWrapper extends Drawable, Element, Selectable {
+    String METHOD_KEY_INIT = VersionedElementListWrapper.class.getCanonicalName() + "#init";
 
     static VersionedElementListWrapper newInstance(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
-        Method init = SoundCategories.CACHED_METHOD_MAP.getOrDefault(METHOD_SIGN_INIT, null);
+        Method init = SoundCategories.CACHED_METHOD_MAP.getOrDefault(METHOD_KEY_INIT, null);
 
         if (init == null) {
             try {
                 Class<?> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "gui.widget.SoundList");
                 init = Objects.requireNonNull(clazz).getMethod("init", MinecraftClient.class, int.class, int.class, int.class, int.class, int.class);
-                SoundCategories.CACHED_METHOD_MAP.put(METHOD_SIGN_INIT, Objects.requireNonNull(init));
+                SoundCategories.CACHED_METHOD_MAP.put(METHOD_KEY_INIT, Objects.requireNonNull(init));
             } catch (Exception ex) {
                 SoundCategories.LOGGER.error("Failed to init 'SoundList' class.", ex);
             }
@@ -65,8 +66,6 @@ public interface VersionedElementListWrapper {
 
     int addReadOnlyCategory(SoundCategory cat);
 
-    int addDoubleCategory(SoundCategory first, @Nullable SoundCategory second);
-
     void addAllCategory(SoundCategory[] categories);
 
     int addGroup(SoundCategory group, ButtonWidget.PressAction pressAction);
@@ -74,8 +73,6 @@ public interface VersionedElementListWrapper {
     void setDimensionsImpl(int width, int height);
 
     boolean mouseScrolledImpl(double mouseX, double mouseY, double horizontalAmount, double verticalAmount);
-
-    Object createCustomizedOption(MinecraftClient client, SoundCategory category);
 
     void addDrawable(ClickableWidget button);
 
@@ -96,7 +93,7 @@ public interface VersionedElementListWrapper {
         }
 
         public VersionedSoundEntry(List<? extends ClickableWidget> w) {
-            widgets = w;
+            this.widgets = w;
         }
 
         public static VersionedSoundEntry newInstance(List<? extends ClickableWidget> w) {

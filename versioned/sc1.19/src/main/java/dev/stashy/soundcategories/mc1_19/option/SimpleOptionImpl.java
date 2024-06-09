@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.mc1_19.gui.option;
+package dev.stashy.soundcategories.mc1_19.option;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
 import me.lonefelidae16.groominglib.Util;
@@ -8,11 +8,9 @@ import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
 
 import java.util.EnumMap;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class SimpleOptionImpl {
     private static final EnumMap<SoundCategory, SimpleOption<Double>> VOLUME_OPTS = Util.make(new EnumMap<>(SoundCategory.class), map -> {
@@ -40,9 +38,5 @@ public class SimpleOptionImpl {
 
     public static SimpleOption<?> init(GameOptions options, SoundCategory category) {
         return Objects.requireNonNull(VOLUME_OPTS.get(category));
-    }
-
-    public static SimpleOption<Boolean> ofBoolean(String key, Text tooltip, boolean value, Consumer<Boolean> consumer) {
-        return SimpleOption.ofBoolean(key, tooltip.equals(Text.empty()) ? SimpleOption.emptyTooltip() : SimpleOption.constantTooltip(tooltip), value, consumer);
     }
 }

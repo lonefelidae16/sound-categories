@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.shared;
+package dev.stashy.soundcategories;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
