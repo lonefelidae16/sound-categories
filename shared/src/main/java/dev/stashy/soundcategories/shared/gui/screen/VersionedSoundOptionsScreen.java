@@ -54,8 +54,6 @@ public abstract class VersionedSoundOptionsScreen extends AbstractSoundListedScr
         }
 
         this.initList();
-
-        this.addDrawableChild(this.list);
     }
 
     protected SoundCategory[] filterVanillaCategory() {
