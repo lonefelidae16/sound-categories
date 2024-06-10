@@ -1,4 +1,4 @@
-package dev.stashy.soundcategories.shared.gui.screen;
+package dev.stashy.soundcategories.shared.text;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
@@ -13,7 +13,7 @@ public abstract class VersionedText {
     static {
         VersionedText instance = null;
         try {
-            Class<VersionedText> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "gui.text.TextImpl");
+            Class<VersionedText> clazz = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "text.TextImpl");
             Constructor<VersionedText> constructor = clazz.getConstructor();
             instance = constructor.newInstance();
         } catch (Exception ex) {

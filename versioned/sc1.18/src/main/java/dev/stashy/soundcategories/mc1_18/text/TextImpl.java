@@ -1,6 +1,6 @@
-package dev.stashy.soundcategories.mc1_18.gui.text;
+package dev.stashy.soundcategories.mc1_18.text;
 
-import dev.stashy.soundcategories.shared.gui.screen.VersionedText;
+import dev.stashy.soundcategories.shared.text.VersionedText;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;

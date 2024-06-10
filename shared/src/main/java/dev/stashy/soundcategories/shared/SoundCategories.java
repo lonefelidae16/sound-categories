@@ -3,7 +3,7 @@ package dev.stashy.soundcategories.shared;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import dev.stashy.soundcategories.CategoryLoader;
-import dev.stashy.soundcategories.shared.gui.screen.VersionedText;
+import dev.stashy.soundcategories.shared.text.VersionedText;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
@@ -93,7 +93,7 @@ public final class SoundCategories {
                         final String fieldClassName = generateFieldClassName(categoryLoader.getClass(), field);
                         if (!SUPPRESSED_NAMES.contains(fieldClassName)) {
                             LOGGER.error(
-                                    "[%s] Cast check failed for the member '%s'.".formatted(SoundCategories.class.getSimpleName(), fieldClassName),
+                                    "Cast check failed for the member '%s'.".formatted(fieldClassName),
                                     new ClassCastException("Can not cast %s to SoundCategory".formatted(field.get(categoryLoader).getClass().getCanonicalName())));
                             SUPPRESSED_NAMES.add(fieldClassName);
                         }
@@ -108,7 +108,7 @@ public final class SoundCategories {
                         // The MASTER already registered.
                         if (!SUPPRESSED_NAMES.contains(className)) {
                             LOGGER.warn(
-                                    "[%s] Unexpected annotation was found.".formatted(SoundCategories.class.getSimpleName()),
+                                    "Unexpected annotation was found.",
                                     new AnnotationFormatError("Class '%s' has a duplicate member with annotation value 'master'!".formatted(className)));
                             SUPPRESSED_NAMES.add(className);
                         }
@@ -138,10 +138,8 @@ public final class SoundCategories {
                             // The 'orphan' category was found, will be grouped together with Vanilla volume options.
                             // This is deprecated as it causes confusion for users.
                             if (!SUPPRESSED_NAMES.contains(className)) {
-                                LOGGER.warn("[{}] Missing annotation value 'master' in class '{}'. This is deprecated.",
-                                        SoundCategories.class.getSimpleName(), className);
-                                LOGGER.warn("[{}] To avoid this message, please specify \"master = true\" in one of the @Register annotation in your class.",
-                                        SoundCategories.class.getSimpleName());
+                                LOGGER.warn("Missing annotation value 'master' in class '{}'. This is deprecated.", className);
+                                LOGGER.warn("To avoid this message, please specify \"master = true\" in one of the @Register annotation in your class.");
                                 SUPPRESSED_NAMES.add(className);
                             }
                         }
@@ -161,7 +159,7 @@ public final class SoundCategories {
                 }
             }
         } catch (Exception ex) {
-            LOGGER.error("[%s] Unexpected error has caught".formatted(SoundCategories.class.getSimpleName()), ex);
+            LOGGER.error("Unexpected error has caught", ex);
         }
 
         // Cleanup.

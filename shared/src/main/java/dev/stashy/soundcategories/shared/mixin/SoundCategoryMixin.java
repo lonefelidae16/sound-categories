@@ -58,7 +58,7 @@ public abstract class SoundCategoryMixin {
         if (REGISTERED_VARIANTS.containsKey(displayName)) {
             if (!SUPPRESSED_NAMES.contains(displayName)) {
                 SoundCategories.LOGGER.error(
-                        "[%s] Duplicate enum name was found: '%s'.".formatted(SoundCategories.class.getSimpleName(), displayName),
+                        "Duplicate enum name was found: '%s'.".formatted(displayName),
                         new RuntimeException("%s is already registered".formatted(displayName)));
                 SUPPRESSED_NAMES.add(displayName);
             }
@@ -104,7 +104,7 @@ public abstract class SoundCategoryMixin {
                     soundcategories$tryMakeVariant(field, categoryLoader, varName);
                 } catch (Exception ex) {
                     SoundCategories.LOGGER.error(
-                            "[%s] Failed to register SoundCategory with ID '%s'".formatted(SoundCategories.class.getSimpleName(), varName), ex);
+                            "Failed to register SoundCategory with ID '%s'".formatted(varName), ex);
                 }
             });
         });

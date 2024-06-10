@@ -1,6 +1,7 @@
 package dev.stashy.soundcategories.shared.gui.screen;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
+import dev.stashy.soundcategories.shared.text.VersionedText;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

@@ -1,15 +1,18 @@
 package dev.stashy.soundcategories.shared.gui.widget;
 
 import dev.stashy.soundcategories.shared.SoundCategories;
-import dev.stashy.soundcategories.shared.gui.screen.VersionedText;
+import dev.stashy.soundcategories.shared.text.VersionedText;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-public interface VersionedButtonWrapper {
+public interface VersionedButtonWrapper extends Element, Drawable, Selectable {
     String METHOD_KEY_INIT = VersionedButtonWrapper.class.getCanonicalName() + "#init";
 
     static VersionedButtonWrapper newInstance(int x, int y, int width, int height, Text message, ButtonWidget.PressAction callback) {
