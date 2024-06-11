@@ -30,6 +30,19 @@ base {
 }
 
 allprojects {
+    apply plugin: 'java'
+
+    java {
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.toVersion(targetJdk)
+        targetCompatibility = JavaVersion.toVersion(targetJdk)
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        it.options.release.set(targetJdk)
+    }
+
     project.ext['moduleId'] = 'unnamed'
     project.ext['moduleName'] = ''
     project.ext['mod_license'] = project.mod_license
@@ -77,12 +90,18 @@ allprojects {
     }
 }
 
+configurations.configureEach {
+    resolutionStrategy.cacheChangingModulesFor 10, 'minutes'
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
     mappings "net.fabricmc:yarn:${rootProject.minecraft_version}${rootProject.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
-    modImplementation include("me.lonefelidae16:groominglib:${rootProject.groom_version}")
+    modImplementation include("me.lonefelidae16:groominglib:${rootProject.groom_version}") {
+        changing = true
+    }
 
     implementation include(project(path: 'shared', configuration: 'namedElements'))
     // 1.21 family
@@ -98,18 +117,6 @@ dependencies {
     implementation include(project(path: 'versioned:sc1.19', configuration: 'namedElements'))
     // 1.18 family
     implementation include(project(path: 'versioned:sc1.18', configuration: 'namedElements'))
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    it.options.release.set(targetJdk)
-}
-
-java {
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.toVersion(targetJdk)
-    targetCompatibility = JavaVersion.toVersion(targetJdk)
 }
 
 jar {

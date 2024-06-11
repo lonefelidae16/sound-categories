@@ -2,7 +2,6 @@ plugins {
     id 'fabric-loom'
 }
 
-var targetJdk = Integer.parseInt(rootProject.java_compiler_version)
 var soundCategories = project.parent.parent
 
 version = "${soundCategories.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
@@ -30,18 +29,6 @@ tasks.withType(ProcessResources).configureEach {
     project.ext['moduleAccessWidener'] = 'soundcategories.accesswidener'
 }
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    it.options.release.set(targetJdk)
-}
-
 loom {
     accessWidenerPath = file("src/main/resources/soundcategories.accesswidener")
-}
-
-java {
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.toVersion(targetJdk)
-    targetCompatibility = JavaVersion.toVersion(targetJdk)
 }

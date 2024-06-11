@@ -2,7 +2,6 @@ plugins {
     id 'fabric-loom'
 }
 
-var targetJdk = Integer.parseInt(rootProject.java_compiler_version)
 var soundCategories = project.parent.parent
 
 version = "${soundCategories.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
@@ -25,16 +24,4 @@ tasks.withType(ProcessResources).configureEach {
     project.ext['moduleId'] = 'mc1_21'
     project.ext['moduleName'] = '1.21 module'
     project.ext['mod_license'] = soundCategories.mod_license
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    it.options.release.set(targetJdk)
-}
-
-java {
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.toVersion(targetJdk)
-    targetCompatibility = JavaVersion.toVersion(targetJdk)
 }

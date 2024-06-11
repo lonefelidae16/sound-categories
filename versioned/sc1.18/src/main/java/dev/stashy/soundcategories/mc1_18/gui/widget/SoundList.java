@@ -84,26 +84,26 @@ public class SoundList extends ElementListWidget<VersionedElementListWrapper.Ver
     }
 
     private Option createCustomizedOption(SoundCategory category) {
-        final DoubleOption option = new DoubleOption(SoundCategories.getOptionsTranslationKey(category), 0, 1, 0,
-                gameOptions -> (double) gameOptions.getSoundVolume(category),
-                (gameOptions, value) -> gameOptions.setSoundVolume(category, value.floatValue()),
-                (gameOptions, doubleOption) -> {
-                    double value = doubleOption.get(gameOptions);
-                    if (value == 0.) {
-                        return doubleOption.getGenericLabel(ScreenTexts.OFF);
-                    } else {
-                        return doubleOption.getPercentLabel(value);
-                    }
-                });
         if (SoundCategories.TOGGLEABLE_CATS.getOrDefault(category, false)) {
             return CyclingOption.create(SoundCategories.getOptionsTranslationKey(category),
                     SoundCategories.TOOLTIPS.getOrDefault(category, Text.of("")), gameOptions -> {
                         return gameOptions.getSoundVolume(category) > 0;
                     },
-                    (gameOptions, o, v) -> MinecraftClient.getInstance().options.setSoundVolume(category, v ? 1.0f : 0.0f)
+                    (gameOptions, o, v) -> gameOptions.setSoundVolume(category, v ? 1.0f : 0.0f)
             );
+        } else {
+            return new DoubleOption(SoundCategories.getOptionsTranslationKey(category), 0, 1, 0,
+                    gameOptions -> (double) gameOptions.getSoundVolume(category),
+                    (gameOptions, value) -> gameOptions.setSoundVolume(category, value.floatValue()),
+                    (gameOptions, doubleOption) -> {
+                        double value = doubleOption.get(gameOptions);
+                        if (value == 0.) {
+                            return doubleOption.getGenericLabel(ScreenTexts.OFF);
+                        } else {
+                            return doubleOption.getPercentLabel(value);
+                        }
+                    });
         }
-        return option;
     }
 
     @Override
