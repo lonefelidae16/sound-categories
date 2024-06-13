@@ -5,26 +5,23 @@
   "name": "Sound Categories",
   "description": "Allows mods to define custom sound categories.",
   "authors": [
-    "stashymane"
+    "stashymane",
+    "lonefelidae16"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/sound-categories",
-    "sources": "https://github.com/stashingco/sound-categories/"
+    "homepage": "${mod_page}",
+    "sources": "${mod_sources}"
   },
-  "license": "CC0-1.0",
+  "license": "${mod_license}",
   "environment": "client",
-  "mixins": [
-    "soundcategories.mixins.json"
-  ],
   "entrypoints": {
     "preLaunch": [
-      "dev.stashy.soundcategories.SoundCategories"
+      "dev.stashy.soundcategories.SoundCategoriesBootstrap"
     ]
   },
   "depends": {
     "fabricloader": "*",
-    "minecraft": "~1.20.5",
+    "minecraft": ">=${mod_support_lowest_mc}",
     "fabric": "*"
-  },
-  "accessWidener": "soundcategories.accesswidener"
+  }
 }

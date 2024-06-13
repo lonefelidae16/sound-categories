@@ -3,7 +3,8 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-<small>_Exciting new features may be coming here._</small>
+<!-- <small>_Exciting new features may be coming here._</small> -->
+* The "V2" implementation.
 
 ### 💭 Bugs / Issues
 

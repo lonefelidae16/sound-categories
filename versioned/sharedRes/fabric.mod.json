@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "soundcategories-${moduleId}-module",
+  "version": "${version}",
+  "name": "Sound Categories ${moduleName}",
+  "description": "Multiple version supporter of SoundCategories.",
+  "authors": [
+    "stashymane",
+    "lonefelidae16"
+  ],
+  "contact": {
+    "homepage": "${mod_page}",
+    "sources": "${mod_sources}"
+  },
+  "license": "${mod_license}",
+  "environment": "client",
+  "mixins": ${moduleMixins},
+  "entrypoints": {
+  },
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "*",
+    "fabric": "*"
+  }
+}

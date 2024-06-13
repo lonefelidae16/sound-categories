@@ -1,35 +1,92 @@
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
+
 plugins {
     id "fabric-loom"
     id "maven-publish"
-    id "com.matthewprenger.cursegradle"
-    id "com.modrinth.minotaur"
-    id "org.jetbrains.changelog"
     id 'com.palantir.git-version'
 }
 
-var targetJdk = 21
+var targetJdk = Integer.parseInt(rootProject.java_compiler_version)
 
-version = "${project.mod_version}+${rootProject.minecraft_version}~lonefelidae16-git+${versionDetails().gitHash[0..7]}"
-group = project.maven_group
+allprojects {
+    version = "${project.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
+    group = project.maven_group
+
+    repositories {
+        maven {
+            name = "stashymane's repo"
+            url = "https://repo.stashy.dev"
+        }
+        maven {
+            url = "https://artifactory.kow08absty.com/artifactory/fabricmc"
+        }
+    }
+}
 
 base {
     archivesName = project.archives_base_name
 }
 
-var compatibleWith = []
+allprojects {
+    apply plugin: 'java'
 
-var split = rootProject.minecraft_version.split('\\.')
-if (split.length == 3 && !rootProject.minecraft_version.contains("-")) {
-    var base = split[0] + "." + split[1]
-    compatibleWith.add(base)
-    for (int i = Integer.parseInt(split[2]); i > 0; i--)
-        compatibleWith.add(base + "." + i)
-} else compatibleWith.add(rootProject.minecraft_version)
+    java {
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.toVersion(targetJdk)
+        targetCompatibility = JavaVersion.toVersion(targetJdk)
+    }
 
-repositories {
-    maven {
-        name = "stashymane's repo"
-        url = "https://repo.stashy.dev"
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        it.options.release.set(targetJdk)
+    }
+
+    project.ext['moduleId'] = 'unnamed'
+    project.ext['moduleName'] = ''
+    project.ext['mod_license'] = project.mod_license
+    project.ext['moduleMixins'] = []
+    project.ext['moduleAccessWidener'] = ''
+
+    tasks.withType(ProcessResources).configureEach {
+        doFirst {
+            var props = [
+                    "mod_page",
+                    "mod_sources",
+//                    "mod_issues",
+                    "mod_support_lowest_mc"
+            ].collectEntries {
+                [it, project.properties[it]]
+            }
+
+            var mixins = new JsonArray()
+            project.ext['moduleMixins'].forEach {
+                mixins.add(it)
+            }
+
+            props.putAll([
+                    'moduleId'    : project.ext['moduleId'],
+                    'moduleName'  : project.ext['moduleName'],
+                    'mod_license' : project.ext['mod_license'],
+                    'moduleMixins': mixins.toString(),
+                    'version'     : project.version
+            ])
+
+            filesMatching("fabric.mod.json") {
+                expand props
+            }
+        }
+
+        doLast {
+            fileTree(dir: outputs.files.asPath, include: "**/fabric.mod.json").each { file ->
+                var fabricModJson = JsonParser.parseString(file.text).asJsonObject
+                if (!project.ext['moduleAccessWidener'].isEmpty()) {
+                    fabricModJson.add("accessWidener", new JsonPrimitive(project.ext['moduleAccessWidener']))
+                    file.text = fabricModJson.toString()
+                }
+            }
+        }
     }
 }
 
@@ -38,30 +95,22 @@ dependencies {
     mappings "net.fabricmc:yarn:${rootProject.minecraft_version}${rootProject.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
-}
+    modImplementation include("me.lonefelidae16:groominglib:${rootProject.groom_version}")
 
-loom {
-    accessWidenerPath = file("src/main/resources/soundcategories.accesswidener")
-}
-
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    it.options.release.set(targetJdk)
-}
-
-java {
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.toVersion(targetJdk)
-    targetCompatibility = JavaVersion.toVersion(targetJdk)
+    implementation include(project(path: 'shared', configuration: 'namedElements'))
+    // 1.21 family
+    implementation include(project(path: 'versioned:sc1.21', configuration: 'namedElements'))
+    // 1.20 family
+    implementation include(project(path: 'versioned:sc1.20.5', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.20.3', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.20.2', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.20', configuration: 'namedElements'))
+    // 1.19 family
+    implementation include(project(path: 'versioned:sc1.19.4', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.19.3', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:sc1.19', configuration: 'namedElements'))
+    // 1.18 family
+    implementation include(project(path: 'versioned:sc1.18', configuration: 'namedElements'))
 }
 
 jar {
@@ -92,48 +141,4 @@ publishing {
             }
         }
     }
-}
-
-changelog {
-    version = project.mod_version
-}
-
-curseforge {
-    apiKey = System.getenv("CURSE_API_KEY") ?: ""
-    project {
-        id = "557374"
-        changelog = project.changelog.get(project.mod_version).toHTML()
-        changelogType = "html"
-        releaseType = "release"
-        for (String ver : compatibleWith)
-            addGameVersion ver
-
-        mainArtifact(remapJar) {
-            displayName = "$project.mod_version for $rootProject.minecraft_version"
-            relations {
-                requiredDependency("fabric-api")
-            }
-        }
-    }
-
-    options {
-        forgeGradleIntegration = false
-        detectNewerJava = true
-    }
-}
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN") ?: ""
-    changelog = project.changelog.get(project.mod_version).toText()
-    projectId = "GROGt4v1"
-    versionNumber = version
-    versionName = "$project.mod_version for $rootProject.minecraft_version"
-    uploadFile = remapJar
-    gameVersions = compatibleWith
-    loaders = ["fabric"]
-}
-
-task publishMod() {
-    dependsOn(tasks.modrinth)
-    dependsOn(tasks.curseforge)
 }
