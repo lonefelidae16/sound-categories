@@ -3,12 +3,31 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-<!-- <small>_Exciting new features may be coming here._</small> -->
-* The "V2" implementation.
+<small>_Exciting new features may be coming here._</small>
 
 ### 💭 Bugs / Issues
 
 <small>_Caught bugs and known issues are written._</small>
+
+## [2.0.0+1.21-build.1] - 2024-06-14
+### ✨ Added
+
+* Bumped version to v2.
+  - Compatible with Minecraft 1.18 or later.
+
+### 👷 Technical
+
+* Dependency updates:
+  - yarn mappings 1.21-build.1
+  - fabric api 0.100.1+1.21
+  - fabric loader 0.15.11
+  - Gradle 8.8
+
+* Set Java language level to 17 to fit the minimum bytecode version
+  supported by Minecraft’s JRE.
+* Modularize packages to fit each Minecraft environment.
+* Use much of reflections to execute code
+  suitable for the current Minecraft runtime environment.
 
 ## [1.2.4+1.20.5-build.2] - 2024-05-14
 ### 🔧 Fixed
