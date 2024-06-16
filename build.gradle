@@ -8,7 +8,7 @@ plugins {
     id 'com.palantir.git-version'
 }
 
-var targetJdk = Integer.parseInt(rootProject.java_compiler_version)
+var targetJavaLang = Integer.parseInt(rootProject.java_lang_version)
 
 allprojects {
     version = "${project.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
@@ -34,13 +34,13 @@ allprojects {
 
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.toVersion(targetJdk)
-        targetCompatibility = JavaVersion.toVersion(targetJdk)
+        sourceCompatibility = JavaVersion.toVersion(targetJavaLang)
+        targetCompatibility = JavaVersion.toVersion(targetJavaLang)
     }
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = "UTF-8"
-        it.options.release.set(targetJdk)
+        it.options.release.set(targetJavaLang)
     }
 
     project.ext['moduleId'] = 'unnamed'
