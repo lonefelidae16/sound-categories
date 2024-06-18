@@ -90,6 +90,9 @@ allprojects {
     }
 }
 
+var devLibsPaths = '**/build/devlibs/*-dev.jar'
+var sourcesPaths = '**/*-sources.jar'
+
 dependencies {
     minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
     mappings "net.fabricmc:yarn:${rootProject.minecraft_version}${rootProject.yarn_mappings}:v2"
@@ -97,20 +100,24 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
     modImplementation include("me.lonefelidae16:groominglib:${rootProject.groom_version}")
 
-    implementation include(project(path: 'shared', configuration: 'namedElements'))
+    compileOnly include(project(path: 'shared'))
     // 1.21 family
-    implementation include(project(path: 'versioned:sc1.21', configuration: 'namedElements'))
+    compileOnly include(project(path: 'versioned:sc1.21'))
     // 1.20 family
-    implementation include(project(path: 'versioned:sc1.20.5', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:sc1.20.3', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:sc1.20.2', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:sc1.20', configuration: 'namedElements'))
+    compileOnly include(project(path: 'versioned:sc1.20.5'))
+    compileOnly include(project(path: 'versioned:sc1.20.3'))
+    compileOnly include(project(path: 'versioned:sc1.20.2'))
+    compileOnly include(project(path: 'versioned:sc1.20'))
     // 1.19 family
-    implementation include(project(path: 'versioned:sc1.19.4', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:sc1.19.3', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:sc1.19', configuration: 'namedElements'))
+    compileOnly include(project(path: 'versioned:sc1.19.4'))
+    compileOnly include(project(path: 'versioned:sc1.19.3'))
+    compileOnly include(project(path: 'versioned:sc1.19'))
     // 1.18 family
-    implementation include(project(path: 'versioned:sc1.18', configuration: 'namedElements'))
+    compileOnly include(project(path: 'versioned:sc1.18'))
+
+    // DevLaunch
+    runtimeOnly fileTree(dir: 'shared', exclude: [sourcesPaths], include: [devLibsPaths])
+    runtimeOnly fileTree(dir: 'versioned', exclude: [sourcesPaths], include: [devLibsPaths])
 }
 
 jar {
