@@ -1,7 +1,7 @@
 package dev.stashy.soundcategories.shared.mixin;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import dev.stashy.soundcategories.CategoryLoader;
 import dev.stashy.soundcategories.shared.SoundCategories;
 import net.minecraft.sound.SoundCategory;
@@ -33,7 +33,7 @@ public abstract class SoundCategoryMixin {
     @Unique
     private static final String INVALID_VAR_NAME_REGEX = "[^a-zA-Z0-9_$]";
     @Unique
-    private static List<String> SUPPRESSED_NAMES;
+    private static Set<String> SUPPRESSED_NAMES;
     @Unique
     private static List<SoundCategory> EDITING_CATS;
     @Unique
@@ -83,7 +83,7 @@ public abstract class SoundCategoryMixin {
             shift = At.Shift.AFTER))
     private static void soundcategories$addCustomVariants(CallbackInfo ci) {
         REGISTERED_VARIANTS = Maps.newHashMap();
-        SUPPRESSED_NAMES = Lists.newArrayList();
+        SUPPRESSED_NAMES = Sets.newHashSet();
         EDITING_CATS = new ArrayList<>(Arrays.asList(field_15255));
         for (SoundCategory category : EDITING_CATS) {
             REGISTERED_VARIANTS.put(category.getName(), category);
@@ -103,8 +103,7 @@ public abstract class SoundCategoryMixin {
                 try {
                     soundcategories$tryMakeVariant(field, categoryLoader, varName);
                 } catch (Exception ex) {
-                    SoundCategories.LOGGER.error(
-                            "Failed to register SoundCategory with ID '%s'".formatted(varName), ex);
+                    SoundCategories.LOGGER.error("Failed to register SoundCategory with ID '{}'", varName, ex);
                 }
             });
         });

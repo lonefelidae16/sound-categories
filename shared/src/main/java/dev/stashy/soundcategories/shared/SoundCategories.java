@@ -1,7 +1,7 @@
 package dev.stashy.soundcategories.shared;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import dev.stashy.soundcategories.CategoryLoader;
 import dev.stashy.soundcategories.shared.text.VersionedText;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
@@ -16,10 +16,7 @@ import java.lang.annotation.AnnotationFormatError;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class SoundCategories {
@@ -32,7 +29,7 @@ public final class SoundCategories {
     public static final Map<String, Method> CACHED_METHOD_MAP = new HashMap<>();
     public static final Map<String, Constructor<?>> CACHED_INIT_MAP = new HashMap<>();
     private static final String OPTION_PREFIX_SOUND_CAT = "soundCategory.";
-    private static final List<String> SUPPRESSED_NAMES = Lists.newArrayList();
+    private static final Set<String> SUPPRESSED_NAMES = Sets.newHashSet();
 
     /**
      * The Map of {@link SoundCategory} including to which group the category belongs.<br>
@@ -85,15 +82,16 @@ public final class SoundCategories {
 
             // First fetch for the MASTER categories.
             for (EntrypointContainer<CategoryLoader> container : allAnnotations.keySet()) {
+                final CategoryLoader categoryLoader = container.getEntrypoint();
+                final String className = categoryLoader.getClass().getCanonicalName();
+
                 for (Field field : allAnnotations.get(container)) {
-                    final CategoryLoader categoryLoader = container.getEntrypoint();
                     final CategoryLoader.Register annotation = field.getAnnotation(CategoryLoader.Register.class);
-                    final String className = categoryLoader.getClass().getCanonicalName();
                     if (!(field.get(categoryLoader) instanceof final SoundCategory category)) {
                         final String fieldClassName = generateFieldClassName(categoryLoader.getClass(), field);
                         if (!SUPPRESSED_NAMES.contains(fieldClassName)) {
                             LOGGER.error(
-                                    "Cast check failed for the member '%s'.".formatted(fieldClassName),
+                                    "Cast check failed for the member '{}'.", fieldClassName,
                                     new ClassCastException("Can not cast %s to SoundCategory".formatted(field.get(categoryLoader).getClass().getCanonicalName())));
                             SUPPRESSED_NAMES.add(fieldClassName);
                         }
@@ -123,10 +121,11 @@ public final class SoundCategories {
 
             // Put all the customized SoundCategories.
             for (EntrypointContainer<CategoryLoader> container : allAnnotations.keySet()) {
+                final CategoryLoader categoryLoader = container.getEntrypoint();
+                final String className = categoryLoader.getClass().getCanonicalName();
+
                 for (Field field : allAnnotations.get(container)) {
-                    final CategoryLoader categoryLoader = container.getEntrypoint();
                     final CategoryLoader.Register annotation = field.getAnnotation(CategoryLoader.Register.class);
-                    final String className = categoryLoader.getClass().getCanonicalName();
                     if (!(field.get(categoryLoader) instanceof final SoundCategory category)) {
                         continue;
                     }
