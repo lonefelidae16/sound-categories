@@ -28,6 +28,10 @@ public class CustomSoundOptionsScreen extends VersionedSoundOptionsScreen {
     }
 
     @Override
+    protected void initBody() {
+    }
+
+    @Override
     protected void initTabNavigation() {
         super.initTabNavigation();
         this.list.setDimensionsImpl(this.width, this.layout.getContentHeight());

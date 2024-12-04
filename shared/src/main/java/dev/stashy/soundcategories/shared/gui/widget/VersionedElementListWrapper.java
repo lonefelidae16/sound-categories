@@ -78,7 +78,7 @@ public interface VersionedElementListWrapper extends Drawable, Element, Selectab
 
     @Environment(EnvType.CLIENT)
     abstract class VersionedSoundEntry extends ElementListWidget.Entry<VersionedSoundEntry> {
-        private static final String METHOD_KEY_CONSTR = VersionedSoundEntry.class.getCanonicalName() + "#<init>";
+        private static final String METHOD_KEY_CTOR = VersionedSoundEntry.class.getCanonicalName() + "#<init>";
 
         public List<? extends ClickableWidget> widgets;
 
@@ -86,7 +86,7 @@ public interface VersionedElementListWrapper extends Drawable, Element, Selectab
             try {
                 Class<VersionedSoundEntry> entry = McVersionInterchange.getCompatibleClass(SoundCategories.BASE_PACKAGE, "gui.widget.SoundEntry");
                 Constructor<VersionedSoundEntry> constructor = entry.getConstructor(List.class);
-                SoundCategories.CACHED_INIT_MAP.put(METHOD_KEY_CONSTR, Objects.requireNonNull(constructor));
+                SoundCategories.CACHED_INIT_MAP.put(METHOD_KEY_CTOR, Objects.requireNonNull(constructor));
             } catch (Exception ex) {
                 SoundCategories.LOGGER.error("Failed to init 'SoundEntry' class.", ex);
             }
@@ -98,7 +98,7 @@ public interface VersionedElementListWrapper extends Drawable, Element, Selectab
 
         public static VersionedSoundEntry newInstance(List<? extends ClickableWidget> w) {
             try {
-                Constructor<VersionedSoundEntry> constructor = (Constructor<VersionedSoundEntry>) SoundCategories.CACHED_INIT_MAP.get(METHOD_KEY_CONSTR);
+                Constructor<VersionedSoundEntry> constructor = (Constructor<VersionedSoundEntry>) SoundCategories.CACHED_INIT_MAP.get(METHOD_KEY_CTOR);
                 return constructor.newInstance(w);
             } catch (Exception ex) {
                 SoundCategories.LOGGER.error("Cannot instantiate 'SoundEntry'", ex);

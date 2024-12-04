@@ -15,10 +15,10 @@ allprojects {
     group = project.maven_group
 
     repositories {
-        maven {
-            name = "stashymane's repo"
-            url = "https://repo.stashy.dev"
-        }
+//        maven {
+//            name = "stashymane's repo"
+//            url = "https://repo.stashy.dev"
+//        }
         maven {
             url = "https://artifactory.kow08absty.com/artifactory/fabricmc"
         }
