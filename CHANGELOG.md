@@ -9,6 +9,17 @@
 
 <small>_Caught bugs and known issues are written._</small>
 
+## [2.0.0+1.21.4-build.1] - 2024-12-14
+### ✨ Added
+
+* Supports 1.21.2 - 1.21.4.
+
+### 👷 Technical
+
+* Dependency updates:
+  - yarn mappings 1.21.4+build.1
+  - fabric api 0.110.5+1.21.1
+
 ## [2.0.0+1.21.1-build.1] - 2024-08-09
 ### ✨ Added
 
